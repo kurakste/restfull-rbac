@@ -1,8 +1,23 @@
 import express from 'express';
 import userRouter from './routers/user';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
 
 const app = express();
 const port = 3000;
+dotenv.config();
+
+const url = 
+    'mongodb+srv://' 
+    + process.env.mongoDbLogin + ':' 
+    + process.env.mongoDbPwd + '@' 
+    + process.env.mongoDbHost; 
+
+mongoose.connect(
+    url,
+    { useNewUrlParser: true },
+);
 
 app.get('/', (req, res) => {
     console.log('connect');
