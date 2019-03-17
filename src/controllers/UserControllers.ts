@@ -19,14 +19,15 @@ const controller = {
   },
 
   get_one_user: (req: any, res: any, next: any) => {
-    User.find({ email: 'kurakste@gmail.com' })
+    const email = req.body.email;
+    User.find({ email: email })
       .exec()
-      .then(user => console.log(user))
+      .then(user => res.json({
+          user: user
+        })
+      )
       .catch(err => console.log(err))
     ;
-    res.json({ 
-      message: 'hi from user/get_one_user'
-    });
   },
 
   del_one_user: (req: any, res: any, next: any) => {

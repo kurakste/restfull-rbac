@@ -2,6 +2,7 @@ import express from 'express';
 import userRouter from './routers/user';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser'; 
 
 
 const app = express();
@@ -18,6 +19,8 @@ mongoose.connect(
     url,
     { useNewUrlParser: true },
 );
+
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
     console.log('connect');
