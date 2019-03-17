@@ -34,13 +34,6 @@ const controller = {
     res.json({ message: 'hi from user/del_one_user'});
   },
 
-  patch_one_user: (req: any, res: any, next: any) => {
-    res.json({ message:'hi from user/patch_one_user' });
-  },
-
-  put_one_user: (req: any, res: any, next: any) => {
-    res.json({ message: 'hi from user/put_one_user' });
-  },
 };
 
 export default controller;
