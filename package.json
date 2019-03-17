@@ -1,7 +1,7 @@
 {
   "name": "rbac-restfull",
   "version": "1.0.0",
-  "description": "RBAC Restfull api&",
+  "description": "RBAC Restfull api",
   "main": "index.ts",
   "scripts": {
     "start": "tsc && node build/server.js",
