@@ -18,10 +18,12 @@
   "author": "kurakste",
   "license": "MIT",
   "dependencies": {
+    "@types/bcrypt": "^3.0.0",
     "@types/body-parser": "^1.17.0",
     "@types/dotenv": "^6.1.0",
     "@types/lodash": "^4.14.123",
     "@types/mongoose": "^5.3.22",
+    "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",

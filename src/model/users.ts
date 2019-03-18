@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Roles from '../interfaces/roles';
 
 const userSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
@@ -9,7 +10,7 @@ const userSchema = new mongoose.Schema({
       match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
   },
   password: { type: String, reqierd: true },
-  quantity: { type: Number, default: 1 }
+  role: { type: Number, default: Roles.candidate }
 
 });
 
