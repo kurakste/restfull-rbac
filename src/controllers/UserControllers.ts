@@ -2,6 +2,10 @@ import User from '../model/users';
 import mongoose from 'mongoose';
 import isUserExist from  '../helpers/isUserExist';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const controller = {
   
@@ -49,7 +53,38 @@ const controller = {
   },
 
   post_sign_in: (req: any, res: any, next: any) => {
-    res.json({ message :'hi from user/post_sign_in' });
+    if (!req.body.password) return res.status(404).json({ message: 'Auth faild'});
+    User.find({ email: req.body.email })
+      .exec()
+      .then((user:any) => {
+        if (user.length < 1) {
+          return res.status(404).json({
+            message: 'Auth faild.'
+          });
+        }
+        bcrypt.compare(req.body.password, user[0].password)
+          .then(result => { 
+            if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
+            if (result) {
+              const token = jwt.sign(
+                { 
+                email: user[0].email,
+                role: user[0].role,
+                userId: user[0]._id
+                }, 
+                process.env.JWT_KEY,
+                {expiresIn: "1h"}
+              );
+              return res.status(200).json({ authToken: token });
+            } else {
+              res.status(404).json({ message: 'Auth faild'});
+            }
+            console.log(result);
+          })
+          .catch(err => { 
+            res.status(500).json({ error: err});
+          });
+      })
   },
 
   get_users_list: (req: any, res: any, next: any) => {
@@ -95,9 +130,16 @@ const controller = {
     User.remove({ _id: id })
       .exec()
       .then((doc: any) => {
-        res.status(200).json({
-          doc
-        });
+        // 'n' is amount string wich was affected.
+        if (doc.n >= 1) {
+          res.status(200).json({
+            message: 'User was deleted'
+          });
+        } else {
+          res.status(404).json({
+            message: 'User not found.'
+          });
+        }
     })
       .catch(err => {
         res.status(500).json({
