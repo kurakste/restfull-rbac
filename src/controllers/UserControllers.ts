@@ -4,6 +4,7 @@ import isUserExist from  '../helpers/isUserExist';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { request } from 'https';
 
 dotenv.config()
 
@@ -46,7 +47,7 @@ const controller = {
       } else {
         //user is exist
         res.status(409).json({
-        message: 'User with such name already exist.'
+        message: 'User with such email already exist.'
         }) 
       }
     }); 
@@ -54,37 +55,42 @@ const controller = {
 
   post_sign_in: (req: any, res: any, next: any) => {
     if (!req.body.password) return res.status(404).json({ message: 'Auth faild'});
+    console.log('here we are');
     User.find({ email: req.body.email })
       .exec()
       .then((user:any) => {
-        if (user.length < 1) {
-          return res.status(404).json({
-            message: 'Auth faild.'
-          });
-        }
-        bcrypt.compare(req.body.password, user[0].password)
-          .then(result => { 
-            if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
-            if (result) {
-              const token = jwt.sign(
-                { 
-                email: user[0].email,
-                role: user[0].role,
-                userId: user[0]._id
-                }, 
-                process.env.JWT_KEY,
-                {expiresIn: "1h"}
-              );
-              return res.status(200).json({ authToken: token });
-            } else {
-              res.status(404).json({ message: 'Auth faild'});
-            }
-            console.log(result);
-          })
-          .catch(err => { 
-            res.status(500).json({ error: err});
-          });
+          if (user.length < 1) {
+            return res.status(404).json({
+              message: 'Auth faild.'
+            });
+          }
+          bcrypt.compare(req.body.password, user[0].password)
+            .then(result => { 
+              if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
+              if (result) {
+                console.log('from signin: ', user);
+                const token = jwt.sign(
+                  { 
+                  email: user[0].email,
+                  role: user[0].role,
+                  userId: user[0]._id
+                  }, 
+                  process.env.JWT_KEY,
+                  {expiresIn: "1h"}
+                );
+                return res.status(200).json({ authToken: token });
+              } else {
+                return res.status(404).json({ message: 'Auth faild'});
+              }
+            })
+            .catch(err => { 
+              return res.status(500).json({ error: err});
+            });
       })
+      .catch(err => {
+        console.log('catch', err);
+        return res.status(500).json({ error: err});
+      });
   },
 
   get_users_list: (req: any, res: any, next: any) => {

@@ -29,6 +29,7 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
+    "loadash": "^1.0.0",
     "lodash": "^4.17.11",
     "mongoose": "^5.4.19"
   },
