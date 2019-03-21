@@ -4,7 +4,6 @@ import isUserExist from  '../helpers/isUserExist';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { request } from 'https';
 
 dotenv.config()
 
