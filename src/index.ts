@@ -1,20 +1,22 @@
 import express from 'express';
 import userRouter from './routers/user';
+import managersRoutes from './routers/managersRoute';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser'; 
 import auth from './middleware/auth';
 
-
 const app = express();
 const port = 3000;
 dotenv.config();
 
-const url = 
-    'mongodb+srv://' 
+const url:any = (process.env.mongoDbLogin) ? 'mongodb+srv://' 
     + process.env.mongoDbLogin + ':' 
     + process.env.mongoDbPwd + '@' 
-    + process.env.mongoDbHost; 
+    + process.env.mongoDbHost 
+    : 'mongodb://' + process.env.mongoDbHost;
+
+console.log('db connecting string: ', url);
 
 mongoose
     .connect(
@@ -25,6 +27,10 @@ mongoose
         console.log('Data base connection error. Check dbase string in .env');
         process.exit(0);
     });
+// It fix deprication alerts.
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
 
 app.use((req, res, next) => {
     res.header('Access-Controll-Allow-Origin', '*');
@@ -47,6 +53,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/user', userRouter);
+app.use('/manager', managersRoutes);
 
 app.use((req, res, next) => {
     let error: any;
