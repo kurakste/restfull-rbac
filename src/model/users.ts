@@ -10,8 +10,11 @@ const userSchema = new mongoose.Schema({
       match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
   },
   password: { type: String, reqierd: true },
-  role: { type: Number, default: Roles.candidate }
-
+  role: { type: Number, default: Roles.candidate },
+  rate: {
+    type: Number,
+    default: 0
+  }
 });
 
 export default mongoose.model('users', userSchema);
