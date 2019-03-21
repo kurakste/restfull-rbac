@@ -13,6 +13,10 @@ const premissinons = [
   { path: '/manager/add-item', method: 'POST', premited: 3 },
   { path: '/manager/items', method: 'GET', premited: 3 },
   { path: '/manager/check-item', method: 'GET', premited: 3 },
+  { path: '/supervisor/get-free', method: 'GET', premited: 2 },
+  { path: '/supervisor/get-my-items', method: 'GET', premited: 2 },
+  { path: '/supervisor/pickup-item', method: 'POST', premited: 2 },
+  { path: '/supervisor/change-status', method: 'POST', premited: 2 },
 ]
 
 export default premissinons;

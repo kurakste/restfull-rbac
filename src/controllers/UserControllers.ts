@@ -75,7 +75,7 @@ const controller = {
                   userId: user[0]._id
                   }, 
                   process.env.JWT_KEY,
-                  {expiresIn: "1h"}
+                  {expiresIn: "96h"}
                 );
                 return res.status(200).json({ authToken: token });
               } else {

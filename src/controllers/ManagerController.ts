@@ -9,7 +9,6 @@ const controller = {
    *  */ 
   post_add_items: (req: any, res: any, next: Function):void => {
     const user = getCurrentUser(req); 
-    console.log('user: ', user);
     const { name, link1, link2, id, roi } = req.body;
     if (!(name && id && roi)) return res.status(406).json({
       message: "name, id, roi - fields is required"
@@ -34,7 +33,6 @@ const controller = {
   },
   get_all_items: (req: any, res: any, next: Function):void => {
     const user = getCurrentUser(req); 
-    console.log('user: ', user);
     Item.find({
       createdby: user.userId  
     })
