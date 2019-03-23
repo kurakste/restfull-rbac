@@ -27,6 +27,7 @@ const controller = {
    *  role - users role;
    */
   patch_user: (req: any, res: any, next: Function):void => {
+    console.log('patch');
     const uid = req.body.uid;
     if (!uid) return res.status(400).json({
       message: 'We need user id as uid at least.'
