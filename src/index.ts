@@ -7,9 +7,10 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser'; 
 import auth from './middleware/auth';
+import cors from 'cors';
 
 const app = express();
-const port = 3000;
+const port = 9090;
 dotenv.config();
 
 const url:any = (process.env.mongoDbLogin) ? 'mongodb+srv://' 
@@ -34,18 +35,7 @@ mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-app.use((req, res, next) => {
-    res.header('Access-Controll-Allow-Origin', '*');
-    res.header('Access-Controll-Allow-Headers',
-        'Origin, X-requested-With, Content-Type, Accept, Authorization');
-
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE');
-        return res.status(200).json({});
-    }
-    next();
-});
-
+app.use(cors());
 app.use(bodyParser.json());
 app.use(auth);
 
