@@ -18,7 +18,8 @@ const premissinons = [
   { path: '/supervisor/pickup-item', method: 'POST', premited: 2 },
   { path: '/supervisor/change-status', method: 'POST', premited: 2 },
   { path: '/admin/users', method: 'GET', premited: 1 },
-  { path: '/admin/get-all-items', method: 'GET', premited: 1 },
+  { path: '/admin/get-all-checked-items', method: 'GET', premited: 1 },
+  { path: '/admin/get-all-free-items', method: 'GET', premited: 1 },
   { path: '/admin/user', method: 'PATCH', premited: 1 },
   { path: '/admin/user', method: 'DELETE', premited: 1 },
 ]

@@ -1,4 +1,3 @@
-import Item from '../model/item';
 import Users from '../model/users';
 import Items from '../model/item';
 
@@ -27,7 +26,7 @@ const controller = {
    *  role - users role;
    */
   patch_user: (req: any, res: any, next: Function):void => {
-    console.log('patch');
+    console.log(req.body);
     const uid = req.body.uid;
     if (!uid) return res.status(400).json({
       message: 'We need user id as uid at least.'
@@ -90,14 +89,29 @@ const controller = {
 
   },
   
-  get_all_items: (req: any, res: any, next: Function):void => {
-    Items.find({
-    })
+  get_all_checked_items: (req: any, res: any, next: Function):void => {
+    Items.find({chekedby: {$ne: null}})
     .exec()
     .then(data => {
+      console.log(data);
       return res.status(200).json(data);
     })
     .catch(err => {
+      console.log(err)
+      return res.status(500).json({ error: err });
+    });
+  
+  },
+  
+  get_all_free_items: (req: any, res: any, next: Function):void => {
+    Items.find({chekedby: null})
+    .exec()
+    .then(data => {
+      console.log(data);
+      return res.status(200).json(data);
+    })
+    .catch(err => {
+      console.log(err)
       return res.status(500).json({ error: err });
     });
   
