@@ -3,6 +3,7 @@ import Roles from '../interfaces/roles';
 
 const userSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
+  name: String,
   email: { 
       type: String, 
       reqierd: true, 
@@ -12,6 +13,10 @@ const userSchema = new mongoose.Schema({
   password: { type: String, reqierd: true },
   role: { type: Number, default: Roles.candidate },
   rate: {
+    type: Number,
+    default: 0
+  },
+  finerate: {
     type: Number,
     default: 0
   }
