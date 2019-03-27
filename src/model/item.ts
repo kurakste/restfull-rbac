@@ -13,9 +13,9 @@ const itemSchema = new mongoose.Schema({
   link2: { type: String, reqierd: false },
   roi: { type: String, reqierd: false },
   created_at: { type: Date, reqierd: true },
-  createdby: { type: mongoose.Types.ObjectId, reqierd: true },
+  createdby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: true },
   checkedstate: { type: Number, reqierd: false },
-  chekedby: { type: mongoose.Types.ObjectId, reqierd: false },
+  chekedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
   checkednotes: { type: String, reqierd: false },
   checked_at: { type: Date, reqierd: true },
   status: { 
