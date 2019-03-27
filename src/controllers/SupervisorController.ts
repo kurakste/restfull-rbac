@@ -33,10 +33,46 @@ const controller = {
       return res.status(500).json({ error: err });
     });
   },
+
+  patch_item: (req: any, res: any, next: Function):void => {
+    //const user = getCurrentUser(req); 
+    console.log('patch_item:', req.body);
+    const {_id, status, checkednotes } = req.body;
+
+    if ((status > 2) || (status < 0)) return res.status(200).json({
+      result: false,
+      message: "Only 0,1,2 code are allowed for suprvisor"
+    });
+
+    Item.findOne({_id: _id })
+      .then((item: any) => {
+        item.status = status;
+        item.checkednotes = checkednotes;
+        item.status = status,
+        item.checked_at = Date(); 
+        item.save()
+          .then((result: any) =>{
+            console.log('patch result: ', result);
+              return res.status(200).json({
+                result: true,
+                data: result,
+              });
+            });
+          })
+          .catch(err => {
+            return res.status(500).json({
+              result: false,
+              message: "error in databese",
+            });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
   
   post_pickup_item: (req: any, res: any, next: Function):void => {
     const iid = req.body.iid;
-
+    console.log(iid);
     Item.findOne({
       _id: iid
     })
@@ -48,7 +84,8 @@ const controller = {
       // Was the item picked up by another supervisor?
       // There is a time lag betwin moment when user gets list 
       // of items & when he will try to pick up an item. 
-      if (data.chekedby) return res.status(409).json({
+      if (data.chekedby) return res.status(200).json({
+        result: false,
         message: 'The item was blocked by another user.'
       });
 
@@ -57,16 +94,17 @@ const controller = {
       data.save()
       .then((data: any) => {
         console.log('saved', data);
-        return res.status(200).json(data);
+        return res.status(200).json({
+          result: true,  
+          data: data
+        });
       })
       .catch((err: any) => {
-        return res.status(500).json({
-          error: err
+        return res.status(200).json({
+          result: false,
+          message: 'dbase error.'
         });
       });
-    })
-    .catch(err => {
-      return res.status(500).json({ error: err });
     });
   },
   post_change_status: (req: any, res: any, next: Function):void => {
