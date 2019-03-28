@@ -24,6 +24,11 @@ const itemSchema = new mongoose.Schema({
       default: Istatus.newitem
     },
   paid_at: { type: Date, reqierd: false },
+  managerFine: { type: Number, required: false},
+  managerFineComment: { type: String, reqierd: false },
+  supervisorFine: { type: Number, required: false},
+  supervisorFineComment: { type: String, reqierd: false },
+
 });
 
 export default mongoose.model('items', itemSchema);
