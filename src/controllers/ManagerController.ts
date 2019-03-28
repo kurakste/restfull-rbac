@@ -2,6 +2,7 @@ import Item from '../model/item';
 import mongoose from 'mongoose';
 import getCurrentUser from '../helpers/getCurrentUser';
 import ItemStatus from '../interfaces/itemstatus';
+import apiDataObject from '../helpers/apiDataObject'; 
 
 const controller = {
   /**

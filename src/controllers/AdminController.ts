@@ -1,6 +1,7 @@
 import Users from '../model/users';
 import Items from '../model/item';
 import { userInfo } from 'os';
+import apiDataObject from '../helpers/apiDataObject'; 
 
 const controller = {
   
@@ -10,8 +11,8 @@ const controller = {
     .exec()
     .then((data: any) => {
       const users = data.map( (_user: any) => {
-        const { _id, name, role, rate, email } = _user;
-        return { _id, name, role, rate, email};
+        const { _id, name, role, rate, email, active } = _user;
+        return { _id, name, role, rate, email, active };
       });
       return res.status(200).json(users);
     })
@@ -25,17 +26,19 @@ const controller = {
    *  uid - user id, required;
    *  rate - user rates level;
    *  role - users role;
+   *  active - active user or no.
    */
   patch_user: (req: any, res: any, next: Function):void => {
-    console.log('input: ', req.body);
-    const uid = req.body.uid;
+    console.log('input in patch: ', req.body);
+    const uid = req.body._id;
     if (!uid) return res.status(400).json({
       message: 'We need user id as uid at least.'
     });
+    console.log('active:');
     const name = req.body.name;
-    console.log('name: ', name);
     const rate = parseFloat(req.body.rate);
     const role = parseInt(req.body.role);
+    const active = req.body.active
     if (!(rate || role )) return res.status(400).json({
       message: 'We need user rate as rate or(and) user role as role.'
     });
@@ -51,6 +54,7 @@ const controller = {
       if (rate) usr.rate = rate;
       if (role) usr.role = role;
       if (name) usr.name = name;
+      usr.active = active;
       usr.save()
         .then( (result: any) =>{
           return res.status(200).json(result);
@@ -99,11 +103,11 @@ const controller = {
     .populate('chekedby')
     .exec()
     .then(data => {
-      return res.status(200).json(data);
+      return res.status(200).json(apiDataObject(data, true));
     })
     .catch(err => {
       console.log(err)
-      return res.status(500).json({ error: err });
+      return res.status(200).json(apiDataObject(null, false, 'Api error'));
     });
   
   },
@@ -114,11 +118,11 @@ const controller = {
     .exec()
     .then(data => {
       console.log(data);
-      return res.status(200).json(data);
+      return res.status(200).json(apiDataObject(data, true));
     })
     .catch(err => {
       console.log(err)
-      return res.status(500).json({ error: err });
+      return res.status(200).json(apiDataObject(null, false, 'Api error :-('));
     });
   
   },
