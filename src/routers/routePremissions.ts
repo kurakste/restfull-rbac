@@ -24,6 +24,8 @@ const premissinons = [
   { path: '/admin/get-all-free-items', method: 'GET', premited: 1 },
   { path: '/admin/user', method: 'PATCH', premited: 1 },
   { path: '/admin/user', method: 'DELETE', premited: 1 },
+  { path: '/admin/item', method: 'PATCH', premited: 1 },
+  { path: '/admin/make-items-paid', method: 'POST', premited: 1 },
 ]
 
 export default premissinons;
