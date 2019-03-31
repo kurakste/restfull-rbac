@@ -98,7 +98,10 @@ const controller = {
   },
   
   get_all_checked_items: (req: any, res: any, next: Function):void => {
-    Items.find({chekedby: {$ne: null}})
+    Items.find({
+      chekedby: {$ne: null},
+      paid_at: null,
+    })
     .populate('createdby')
     .populate('chekedby')
     .exec()
@@ -125,6 +128,92 @@ const controller = {
       return res.status(200).json(apiDataObject(null, false, 'Api error :-('));
     });
   
+  },
+
+  patch_item: (req: any, res: any, next: Function):void => {
+    //const user = getCurrentUser(req); 
+    console.log('manager patch_item:', req.body);
+    const {
+      _id, status, supervisorFine, 
+      supervisorFineComment, managerFine, managerFineComment
+      } = req.body;
+
+    Items.findOne({_id: _id })
+      .then((item: any) => {
+        item.status = status;
+        item.supervisorFineComment = supervisorFineComment;
+        item.supervisorFine = supervisorFine;
+        item.managerFine = managerFine;
+        item.managerFineComment = managerFineComment;
+        item.save()
+          .then((result: any) =>{
+            console.log('patch result: ', result);
+              return res.status(200).json({
+                result: true,
+                data: result,
+              });
+            });
+          })
+          .catch(err => {
+            return res.status(500).json({
+              result: false,
+              message: "error in databese",
+            });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  /**
+   *  It gets array of items id wich hase to be marked as 
+   *  paid. In database paid items have paid_at date. If that field null - 
+   *  the item is not paid, if it hase date - it hase been paid. 
+   */
+  pos_make_items_paid: (req: any, res: any, next: Function):void => {
+    console.log('We in the make items paid controller', req.body);
+    if (
+        (!req.body.payload) || 
+        (!Array.isArray(req.body.payload)) ||
+        (req.body.payload.length === 0)
+      ) {
+          return res.status(200).json({
+            success: true,
+            message: 'It seems like array was empty.',
+          });
+        }
+
+        Items.updateMany(
+          {_id: {$in:req.body.payload}},
+          {$set: {paid_at: Date()}}
+        )
+          .then((result) => {
+            console.log('successfull result with db: ', result);
+            return res.status(200).json({
+              success: true,
+              message: 'Hi, all was excelent!!!',
+            });
+          })
+          .catch((err) => {
+            console.log('db error happenes: ', err);
+            return res.status(200).json({
+              success: true,
+              message: 'Some thing goes wrong....',
+            });
+          })
+
+    // Items.find({ _id: {$in: req.body.payload}})
+    //   .exec()
+    //   .then(res => {
+    //     res.forEach(item => {
+    //       item.
+
+    //     })
+    //     console.log('result selected:', res)
+    //   })
+    //   .catch(err => console.log('error after find: ', err));
+
+   
+
   },
 
 }
