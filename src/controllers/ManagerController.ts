@@ -102,7 +102,7 @@ const controller = {
           isExist: false
         });
     });
-  }
+  },
 }
 
 export default controller;
