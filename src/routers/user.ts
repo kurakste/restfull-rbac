@@ -7,5 +7,6 @@ router.post('/signin', UserController.post_sign_in);
 router.get('/list', UserController.get_users_list);
 router.get('/one', UserController.get_one_user);
 router.delete('/one', UserController.del_one_user);
+router.patch('/one', UserController.patch_one_user);
 
 export default router;

@@ -69,6 +69,12 @@ const controller = {
               message: 'Auth faild.'
             });
           }
+          if (!user[0].active) {
+            return res.status(200).json({
+              success: false,
+              message: 'Auth faild.'
+            });
+          }
           bcrypt.compare(req.body.password, user[0].password)
             .then(result => { 
               if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
@@ -129,7 +135,7 @@ const controller = {
       .exec()
       .then((user: any) => {
         if (user.length) {
-          delete user[0].password;
+          user[0].password =null;
           res.status(200).json(user[0]);
           } else {
           res.status(404).json({
@@ -139,6 +145,37 @@ const controller = {
     })
       .catch(err => {
         //TODO: Create error handler. Do not send error 500 in production server.
+        res.status(500).json({
+          error: err
+        })
+      });
+  },
+
+  patch_one_user: (req: any, res: any, next: any) => {
+    
+    console.log('body from patch user: ', req.body);
+
+    const id = req.body.id;
+    const name = req.body.name;
+    const email = req.body.email;
+    User.updateOne(
+      { _id: id },
+      {name: name, email: email}
+    )
+      .exec()
+      .then((doc: any) => {
+        // 'n' is amount string wich was affected.
+        if (doc.n >= 1) {
+          res.status(200).json({
+            message: 'User was updated'
+          });
+        } else {
+          res.status(200).json({
+            message: 'User not found.'
+          });
+        }
+    })
+      .catch(err => {
         res.status(500).json({
           error: err
         })
