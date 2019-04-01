@@ -65,9 +65,11 @@ const controller = {
   get_all_items: (req: any, res: any, next: Function):void => {
     const user = getCurrentUser(req); 
     Item.find({
-      createdby: user.userId  
+      createdby: user.userId,
+      paid_at: null,
     })
     .populate('users')
+    .populate('chekedby')
     .exec()
     .then(items => {
       console.log('items: ', items);

@@ -7,7 +7,8 @@ const itemSchema = new mongoose.Schema({
   id: { 
       type: String, 
       reqierd: true, 
-      unique: true
+      unique: true,
+      dropDups: true,
   },
   link1: { type: String, reqierd: false },
   link2: { type: String, reqierd: false },
