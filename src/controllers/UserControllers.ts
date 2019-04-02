@@ -28,7 +28,8 @@ const controller = {
                 _id: mongoose.Types.ObjectId(),
                 name: name,
                 email: email,
-                password: hash
+                password: hash,
+                active: true,
               });
               usr.save()
                 .then((result:any) => {
