@@ -6,11 +6,10 @@ const controller = {
   
   get_free: (req: any, res: any, next: Function):void => {
     Item.find({
-      chekedby: null
+      checkedby: null
     })
     .exec()
     .then(data => {
-//      console.log('Data from super: ', data);
       return res.status(200).json(data);
     })
     .catch(err => {
@@ -22,7 +21,7 @@ const controller = {
   get_my_items: (req: any, res: any, next: Function):void => {
     const user = getCurrentUser(req); 
     Item.find({
-      chekedby: user.userId
+      checkedby: user.userId
     })
     .exec()
     .then(data => {
@@ -72,7 +71,7 @@ const controller = {
   
   post_pickup_item: (req: any, res: any, next: Function):void => {
     const iid = req.body.iid;
-    console.log(iid);
+    console.log('pickup:', iid);
     Item.findOne({
       _id: iid
     })
@@ -84,13 +83,13 @@ const controller = {
       // Was the item picked up by another supervisor?
       // There is a time lag betwin moment when user gets list 
       // of items & when he will try to pick up an item. 
-      if (data.chekedby) return res.status(200).json({
+      if (data.checkedby) return res.status(200).json({
         result: false,
         message: 'The item was blocked by another user.'
       });
 
       const user = getCurrentUser(req); 
-      data.chekedby = user.userId;
+      data.checkedby = user.userId;
       data.save()
       .then((data: any) => {
         console.log('saved', data);
@@ -140,7 +139,6 @@ const controller = {
       });
     });
   }
-
 }
 
 export default controller;
