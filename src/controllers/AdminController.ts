@@ -99,11 +99,11 @@ const controller = {
   
   get_all_checked_items: (req: any, res: any, next: Function):void => {
     Items.find({
-      chekedby: {$ne: null},
+      checkedby: {$ne: null},
       paid_at: null,
     })
     .populate('createdby')
-    .populate('chekedby')
+    .populate('checkedby')
     .exec()
     .then(data => {
       return res.status(200).json(apiDataObject(data, true));
@@ -116,7 +116,7 @@ const controller = {
   },
   
   get_all_free_items: (req: any, res: any, next: Function):void => {
-    Items.find({chekedby: null})
+    Items.find({checkedby: null})
     .populate('createdby')
     .exec()
     .then(data => {

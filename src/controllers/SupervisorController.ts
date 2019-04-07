@@ -48,7 +48,7 @@ const controller = {
         item.status = status;
         item.checkednotes = checkednotes;
         item.status = status,
-        item.checked_at = Date(); 
+        item.checkedat = Date(); 
         item.save()
           .then((result: any) =>{
             console.log('patch result: ', result);
