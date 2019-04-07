@@ -10,17 +10,24 @@ const controller = {
   post_add_items: (req: any, res: any, next: Function):void => {
     const user = getCurrentUser(req); 
     console.log(req.body);
-    const { name, link1, link2, id, roi } = req.body;
-    if (!(name && id && roi)) return res.status(406).json({
-      message: "name, id, roi - fields is required"
+    const { 
+      id, lamazon, lsupplier, bsr, amazon, supplier, 
+      commission, delivery, profit, margin, 
+    } = req.body;
+    if (!id) return res.status(406).json({
+      message: "id- fields is required"
     });
 
     const item = new Item({
       _id: mongoose.Types.ObjectId(), 
-      name, link1, link2, id, roi, 
-      created_at: Date(),
+      id, lamazon, lsupplier, bsr, amazon, supplier, 
+      commission, delivery, profit, margin, 
+      createdat: Date(),
       createdby: user.userId 
     });
+
+    console.log('adding new item', item);
+
     item
       .save()
       .then( data => {
@@ -36,15 +43,24 @@ const controller = {
 
   patch_item: (req: any, res: any, next: Function):void => {
     //const user = getCurrentUser(req); 
-    const {_id, name, link1, link2, id, roi } = req.body;
+    const {
+      id, lamazon, lsupplier, bsr, amazon,
+      supplier, commission, delivery, profit,
+      margin,
+    } = req.body;
 
-    Item.findOne({_id: _id })
+    Item.findOne({id: id })
       .then((item: any) => {
-        item.name = name;
-        item.link1 = link1;
-        item.link2 = link2;
-        item.id = id;
-        item.roi = parseFloat(roi);
+        item.id = id, 
+        item.lamazon = lamazon, 
+        item.lsupplier = lsupplier, 
+        item.bsr = parseFloat(bsr), 
+        item.amazon = parseFloat(amazon),
+        item.supplier =parseFloat(supplier), 
+        item.commission = parseFloat(commission), 
+        item.delivery = parseFloat(delivery), 
+        item.profit = parseFloat(profit),
+        item.margin = parseFloat(margin),
         item.save()
           .then((result: any) =>{
               return res.status(200).json(result);
@@ -70,7 +86,6 @@ const controller = {
     .populate('chekedby')
     .exec()
     .then(items => {
-      console.log('items: ', items);
       return res.status(200).json(items);
     })
     .catch(err => {
@@ -79,9 +94,9 @@ const controller = {
       });
     });
   },
+
   get_check_item: (req: any, res: any, next: Function):void => {
     const itemid = req.query.iid;
-    console.log(itemid);
     Item.find({
       id: itemid,  
       paid_at: null,
