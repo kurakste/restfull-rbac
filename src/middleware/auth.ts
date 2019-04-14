@@ -4,7 +4,11 @@ import _ from 'lodash';
 import apiDataObject from '../helpers/apiDataObject';
 
 const auth = (req: any, res: any, next:any) => {
-  console.log('auth', req.body);
+  
+  const path = req.path.split('/');
+  console.log('path:', path);
+  if (path[1]==='public') return next();
+
   const prem: any = _.filter(
     premissions, 
     { path: req.path, method: req.method }
