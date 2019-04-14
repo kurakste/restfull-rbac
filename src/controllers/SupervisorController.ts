@@ -47,7 +47,7 @@ const controller = {
       .then((item: any) => {
         item.status = status;
         item.checkednotes = checkednotes;
-        item.status = status,
+        //item.status = status,
         item.checkedat = Date(); 
         item.save()
           .then((result: any) =>{
