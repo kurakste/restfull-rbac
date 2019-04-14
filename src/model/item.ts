@@ -10,6 +10,7 @@ const itemSchema = new mongoose.Schema({
       unique: true,
       dropDups: true,
   },
+  amazondesc: { type: mongoose.Types.ObjectId, ref: 'amazon', reqierd: false },
   lamazon: { type: String, reqierd: false },
   lsupplier: { type: String, reqierd: false },
   bsr: { type: Number, reqierd: false },
