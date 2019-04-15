@@ -36,8 +36,17 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
 app.use(cors({
-
 }));
+
+/**
+ * At a minimum, disable X-Powered-By header
+ * If you don’t want to use Helmet, then at least disable 
+ * the X-Powered-By header. Attackers can use this header 
+ * (which is enabled by default) to detect apps running Express 
+ * and then launch specifically-targeted attacks.So, best practice 
+ * is to to turn off the header with the app.disable() method:
+ */
+app.disable('x-powered-by');
 
 app.use('/public', express.static('public'));
 app.options("/*", function(req, res, next){
