@@ -1,8 +1,9 @@
 /**
  * 1) Get all items that hase blank description field. 
  * 2) Parse product description from amazon.
- * 3) Store propduc description in dbase 
- * 4) Strore desctiption record id in products table
+ * 3) donload picture to the local storage
+ * 4) Store propduc description in dbase 
+ * 5) Strore desctiption record id in products table
  */
 
 import bootstrap from '../bootstrap/bootstrap';
