@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import apiDataObject from '../helpers/apiDataObject';
+import roles from '../interfaces/roles'
 dotenv.config()
 
 const controller = {
@@ -30,6 +31,7 @@ const controller = {
                 email: email,
                 password: hash,
                 active: true,
+                role: roles.candidate,
               });
               usr.save()
                 .then((result:any) => {
