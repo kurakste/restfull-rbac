@@ -3,6 +3,7 @@ import userRouter from './routers/user';
 import managersRoutes from './routers/managersRoute';
 import superviserRoutes from './routers/supervisorRoute';
 import adminRoutes from './routers/adminRoute';
+import watcherRouter from './routers/watcher';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser'; 
@@ -68,6 +69,7 @@ app.use('/user', userRouter);
 app.use('/manager', managersRoutes);
 app.use('/supervisor', superviserRoutes);
 app.use('/admin', adminRoutes);
+app.use('/watcher', watcherRouter);
 
 app.use((req, res, next) => {
     let error: any;

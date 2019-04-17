@@ -14,6 +14,7 @@ const amazonSchema = new mongoose.Schema({
   description: { type: String, reqierd: false },
   price: { type: String, reqierd: false },
   availability: { type: String, reqierd: false },
+  detail: { type: String, reqierd: false },
 });
 
 export default mongoose.model('amazon', amazonSchema);

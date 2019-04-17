@@ -19,7 +19,7 @@ const auth = (req: any, res: any, next:any) => {
     .status(200)
     .json(apiDataObject(null, false, 'Auth error'));
     
-    if (prem[0].premited === 4) {
+    if (prem[0].premited === 5) {
       return next(); // This path is not protected
     }
     if (!process.env.JWT_KEY) throw new Error('JWT_KEY has to be set in .env file');

@@ -6,6 +6,7 @@ interface AmazonProfile {
   description: string,
   price: string,
   availability: string,
+  detail: string,
 }
 
 export default AmazonProfile;

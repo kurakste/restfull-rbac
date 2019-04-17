@@ -5,8 +5,9 @@
  * */ 
 
 const premissinons = [
-  { path: '/user/signin', method: 'POST', premited: 4 },
-  { path: '/user/signup', method: 'POST', premited: 4 },
+  { path: '/user/signin', method: 'POST', premited: 5 },
+  { path: '/user/signup', method: 'POST', premited: 5 },
+  { path: '/watcher/products', method: 'GET', premited: 4 },
   { path: '/user/list', method: 'GET', premited: 1 },
   { path: '/user/one', method: 'GET', premited: 3 },
   { path: '/user/one', method: 'PATCH', premited: 3 },

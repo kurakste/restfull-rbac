@@ -11,11 +11,11 @@ const controller = {
   
   //TODO: Why Express.Request not work with bodyParser???
   post_sign_up: (req: any, res: any, next: Function):void => {
-    console.log(req.body);
+    console.log('body:', req.body);
     const name: string = req.body.name;
     const email: string = req.body.email;
     const password: string|null = req.body.password;
-    if (!(email && password)) res
+    if (!(email && password)) return res
       .status(200).json(apiDataObject(null, false, 'Login & password are required.')) 
     
     // it will return ppromisies with flag in resolve function
@@ -33,7 +33,7 @@ const controller = {
               });
               usr.save()
                 .then((result:any) => {
-                  delete result.password;
+                  result.password = null;
                   res.status(200).json(
                     apiDataObject(result)
                   );
