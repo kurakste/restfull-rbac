@@ -59,7 +59,7 @@ const  main =  async () => {
   
   const promBunch = amazon.map(async (el:any)=> {
     if(!Array.isArray(el.images)) return false;
-    return await downloadimages(el.images)  
+    return downloadimages(el.images)  
   });
 
   await Promise.all(promBunch);

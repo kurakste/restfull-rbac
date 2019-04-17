@@ -12,6 +12,14 @@ const userAg = [
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.1.2 Safari/605.1.15',
   'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0',
 ];
+
+const cleaner = (input:string):string => {
+  //input= input.replace(/\n/g, '');
+  input = input.replace(/\t/g, '');
+  input = input.replace(/\s{2,}/g, ' ');
+  return input;
+}
+
 const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
   const url = 'https://www.amazon.com/dp/';
   const userAgIdx = Math.floor(Math.random() * (userAg.length-1));
@@ -29,6 +37,7 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       description: '',
       price: '',
       availability: '',
+      detail: ''
     }
     const data = await needle('get', url + iid, opt);
     const html = data.body;
@@ -39,7 +48,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       if (link.search('images/I/')!==-1) {
         link = link.split('/')[5];
         let imageid = (link.split('.')[0]) ? link.split('.')[0] : '';
-        
         product.images.push(imageid);
       }
     });
@@ -47,26 +55,17 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     const title = pt.text().trim();
     product.title = title;
     const pa = $('#fbExpandableSectionContent > ul');
-    let about = pa.text();
-    about = about.replace(/\n/g, '');
-    about = about.replace(/\t/g, '');
-    about = about.replace(/\s{2,}/g, '');
-    product.about = about;
+    product.about = cleaner(pa.text());
     const pd = $('#productDescription');
-    let desc = pd.text();
-    desc = desc.replace(/\n/g, '');
-    desc = desc.replace(/\t/g, '');
-    desc = desc.replace(/\s{2,}/g, '');
-    product.description = desc;
+    product.description = cleaner(pd.text());
     const ppr = $('#priceblock_ourprice');
     let price = ppr.text();
     product.price = price;
     const pav = $('#availability-brief');
-    let availability = pav.text();
-    availability= availability.replace(/\n/g, '');
-    availability = availability.replace(/\t/g, '');
-    availability = availability.replace(/\s{2,}/g, '');
-    product.availability = availability;
+    product.availability = cleaner(pav.text());
+
+    const pdet = $('#productDetails_detailBullets_sections1');
+    product.detail = cleaner(pdet.text());
     return product;
   }
   const data = await getData()  
