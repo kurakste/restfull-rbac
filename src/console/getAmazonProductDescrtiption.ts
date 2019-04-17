@@ -92,8 +92,6 @@ const  main =  async () => {
     console.log(err);
   }
 
-  console.log('stored: ', stored);
-  
   db.disconnect();
 } 
 

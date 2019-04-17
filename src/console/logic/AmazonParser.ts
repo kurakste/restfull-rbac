@@ -21,6 +21,7 @@ const cleaner = (input:string):string => {
 }
 
 const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
+  console.log('we parser iid:', iid);
   const url = 'https://www.amazon.com/dp/';
   const userAgIdx = Math.floor(Math.random() * (userAg.length-1));
   const getData = async () => {
@@ -48,6 +49,7 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       if (link.search('images/I/')!==-1) {
         link = link.split('/')[5];
         let imageid = (link.split('.')[0]) ? link.split('.')[0] : '';
+        imageid = imageid.replace('%', '__'); // we cant use % as a part of file path...
         product.images.push(imageid);
       }
     });
