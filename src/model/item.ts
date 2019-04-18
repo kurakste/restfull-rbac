@@ -14,6 +14,7 @@ const itemSchema = new mongoose.Schema({
   lamazon: { type: String, reqierd: false },
   lsupplier: { type: String, reqierd: false },
   bsr: { type: Number, reqierd: false },
+  fba: { type: Boolean, default: false },
   amazon: { type: Number, reqierd: false },
   supplier: { type: Number, reqierd: false },
   commission: { type: Number, reqierd: false },

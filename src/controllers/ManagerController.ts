@@ -11,7 +11,7 @@ const controller = {
     const user = getCurrentUser(req); 
     console.log(req.body);
     const { 
-      id, lamazon, lsupplier, bsr, amazon, supplier, 
+      id, fba, lamazon, lsupplier, bsr, amazon, supplier, 
       commission, delivery, profit, margin, icomment 
     } = req.body;
     if (!id) return res.status(406).json({
@@ -20,7 +20,7 @@ const controller = {
 
     const item = new Item({
       _id: mongoose.Types.ObjectId(), 
-      id, lamazon, lsupplier, bsr, amazon, supplier, 
+      id, fba, lamazon, lsupplier, bsr, amazon, supplier, 
       commission, delivery, profit, margin, icomment, 
       createdat: Date(),
       createdby: user.userId 
@@ -44,7 +44,7 @@ const controller = {
   patch_item: (req: any, res: any, next: Function):void => {
     //const user = getCurrentUser(req); 
     const {
-      id, lamazon, lsupplier, bsr, amazon,
+      id, fba, lamazon, lsupplier, bsr, amazon,
       supplier, commission, delivery, profit,
       margin, icomment
     } = req.body;
@@ -52,6 +52,7 @@ const controller = {
     Item.findOne({id: id })
       .then((item: any) => {
         item.id = id; 
+        item.fba = fba;
         item.lamazon = lamazon;
         item.lsupplier = lsupplier;
         item.bsr = parseFloat(bsr); 

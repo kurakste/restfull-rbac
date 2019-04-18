@@ -70,6 +70,7 @@ const  main =  async () => {
     dbamazon._id = mongoose.Types.ObjectId();
     return dbamazon.save();
   });
+  
   try {
     stored = await Promise.all(storeprom);
   } catch (e) {
