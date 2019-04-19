@@ -11,8 +11,9 @@ const controller = {
     .exec()
     .then((data: any) => {
       const users = data.map( (_user: any) => {
-        const { _id, name, role, rate, email, active } = _user;
-        return { _id, name, role, rate, email, active };
+        //TODO: Is there more elegant way to remove password?
+        const { _id, name, role, rate, email, fba, active } = _user;
+        return { _id, name, role, rate, email, fba, active };
       });
       return res.status(200).json(users);
     })
@@ -39,6 +40,7 @@ const controller = {
     const rate = parseFloat(req.body.rate);
     const role = parseInt(req.body.role);
     const active = req.body.active
+    const fba = req.body.fba
     if (!(rate || role )) return res.status(400).json({
       message: 'We need user rate as rate or(and) user role as role.'
     });
@@ -54,6 +56,7 @@ const controller = {
       if (rate) usr.rate = rate;
       if (role) usr.role = role;
       if (name) usr.name = name;
+      usr.fba = fba;
       usr.active = active;
       usr.save()
         .then( (result: any) =>{

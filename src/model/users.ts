@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  active: {type: Boolean, default: true }
+  fba: {type: Boolean, default: false },
+  active: {type: Boolean, default: true },
 });
 
 export default mongoose.model('users', userSchema);
