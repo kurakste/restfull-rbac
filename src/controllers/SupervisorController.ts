@@ -5,8 +5,11 @@ import ItemStatus from '../interfaces/itemstatus';
 const controller = {
   
   get_free: (req: any, res: any, next: Function):void => {
+    const user = getCurrentUser(req); 
+    console.log('get free user:', user);
     Item.find({
-      checkedby: null
+      checkedby: null,
+      fba: {$eq: user.fba}
     })
     .exec()
     .then(data => {

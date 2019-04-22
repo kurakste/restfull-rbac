@@ -87,6 +87,7 @@ const controller = {
                   { 
                     email: user[0].email,
                     role: user[0].role,
+                    fba: user[0].fba,
                     userId: user[0]._id
                   }, 
                     process.env.JWT_KEY,
@@ -97,6 +98,7 @@ const controller = {
                   _id: user[0]._id,
                   name: user[0].email,
                   role: user[0].role,
+                  fba: user[0].fba,
                   authToken: token,
                 });
               } else {
