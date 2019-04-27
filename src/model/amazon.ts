@@ -15,6 +15,8 @@ const amazonSchema = new mongoose.Schema({
   price: { type: String, reqierd: false },
   availability: { type: String, reqierd: false },
   detail: { type: String, reqierd: false },
+  asin: { type: String, reqierd: false },
+  bsr: { type: String, reqierd: false },
 });
 
 export default mongoose.model('amazon', amazonSchema);

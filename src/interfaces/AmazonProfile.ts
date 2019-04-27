@@ -7,6 +7,8 @@ interface AmazonProfile {
   price: string,
   availability: string,
   detail: string,
+  asin: string,
+  bsr: string,
 }
 
 export default AmazonProfile;
