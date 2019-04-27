@@ -13,7 +13,7 @@ const userAg = [
   'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0',
 ];
 
-const cleaner = (input:string):string => {
+const cleaner = (input: string): string => {
   //input= input.replace(/\n/g, '');
   input = input.replace(/\t/g, '');
   input = input.replace(/\s{2,}/g, ' ');
@@ -23,30 +23,32 @@ const cleaner = (input:string):string => {
 const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
   console.log('we parser iid:', iid);
   const url = 'https://www.amazon.com/dp/';
-  const userAgIdx = Math.floor(Math.random() * (userAg.length-1));
+  const userAgIdx = Math.floor(Math.random() * (userAg.length - 1));
   const getData = async () => {
     const opt = {
       headers: {
-        'User-Agent': userAg[userAgIdx], 
+        'User-Agent': userAg[userAgIdx],
       }
     };
-    const product:AmazonProductProfile = { 
-      id: iid, 
+    const product: AmazonProductProfile = {
+      id: iid,
       images: [],
-      title: '', 
+      title: '',
       about: '',
       description: '',
       price: '',
       availability: '',
-      detail: ''
+      detail: '',
+      asin: '',
+      bsr: '',
     }
     const data = await needle('get', url + iid, opt);
     const html = data.body;
     const $ = cheerio.load(html);
     const dp = $('#imageBlock_feature_div'); //('#dp');
-    dp.find('img').each(function(this: any, i,e) {
+    dp.find('img').each(function (this: any, i, e) {
       let link = $(this).attr('src');
-      if (link.search('images/I/')!==-1) {
+      if (link.search('images/I/') !== -1) {
         link = link.split('/')[5];
         let imageid = (link.split('.')[0]) ? link.split('.')[0] : '';
         imageid = imageid.replace('%', '__'); // we cant use % as a part of file path...
@@ -66,11 +68,47 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     const pav = $('#availability-brief');
     product.availability = cleaner(pav.text());
 
-    const pdet = $('#productDetails_detailBullets_sections1');
-    product.detail = cleaner(pdet.text());
+    const getProdDetail = ():string => {
+      const markers = [
+        '#prodDetails', '#descriptionAndDetails', '#productDetails',
+        '#detail-bullets', '#detailBullets', '#productDetails_db_sections',
+      ];
+      const parsed = markers.map(el => {
+        const pdet = $(el); //$('#detailBullets'); //('#productDetails_detailBullets_sections1');
+        return product.detail = cleaner(pdet.text());
+      })
+      console.log('prod detail: ', parsed);
+      const reg = /ASIN:?\s*(\S+)/i 
+      const filtered = parsed.filter(el => (el!=='' && el.match(reg)));
+      return (filtered[0]) ? filtered[0] : '';
+    }
+
+    const getWight = (input:string):string => {
+      const reg = /weight:?\s?(\d+.?\d*\s*\w+)?\s/i 
+      const res = input.match(reg);
+      return res ? res[1]: '';
+    }
+
+    const getASIN = (input:string):string => {
+      const reg = /ASIN:?\s*(\S+)/i 
+      const res = input.match(reg);
+      return res ? res[1]: '';
+    }
+    const getBsr = (input:string):string => {
+      const reg = /Best\s*Sellers\s*Rank\s*:?\s*#(\d+,?\d*)/i 
+      const res = input.match(reg);
+      console.log('bsr: ', res ? res[1]: '');
+      return res ? res[1]: '';
+    }
+
+    product.detail = getProdDetail();
+    product.asin = getASIN(product.detail);
+    product.bsr = getBsr(product.detail);
+    getWight(product.detail);
+    console.log('bsr: ', product.bsr);
     return product;
   }
-  const data = await getData()  
+  const data = await getData()
   return data;
 }
 
