@@ -1,27 +1,29 @@
 import User from '../model/users';
+import express from 'express';
 import mongoose from 'mongoose';
-import isUserExist from  '../helpers/isUserExist';
+import isUserExist from '../helpers/isUserExist';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import apiDataObject from '../helpers/apiDataObject';
 import roles from '../interfaces/roles'
+import { NextFunction } from 'connect';
 dotenv.config()
 
 const controller = {
-  
+
   //TODO: Why Express.Request not work with bodyParser???
-  post_sign_up: (req: any, res: any, next: Function):void => {
+  post_sign_up: (req: any, res: any, next: Function): void => {
     console.log('body:', req.body);
     const name: string = req.body.name;
     const email: string = req.body.email;
-    const password: string|null = req.body.password;
+    const password: string | null = req.body.password;
     if (!(email && password)) return res
-      .status(200).json(apiDataObject(null, false, 'Login & password are required.')) 
-    
+      .status(200).json(apiDataObject(null, false, 'Login & password are required.'))
+
     // it will return ppromisies with flag in resolve function
     isUserExist(email)
-     .then(flag => {
+      .then(flag => {
         if (!flag) { //user with such email doesn't exist.
           bcrypt.hash(password, 10)
             .then(hash => {
@@ -34,7 +36,7 @@ const controller = {
                 role: roles.candidate,
               });
               usr.save()
-                .then((result:any) => {
+                .then((result: any) => {
                   result.password = null;
                   res.status(200).json(
                     apiDataObject(result)
@@ -46,91 +48,92 @@ const controller = {
                   );
                 });
             })
-          .catch(err => {
-            return res.status(500).json(
-                  apiDataObject(null, false, 'Data base error')
-            );
-          })
-      } else {
-        //user is exist
-        res.status(200).json(
-          apiDataObject(null, false, 'User with such email allredy exist.')
-        );
-      }
-    }); 
+            .catch(err => {
+              return res.status(500).json(
+                apiDataObject(null, false, 'Data base error')
+              );
+            })
+        } else {
+          //user is exist
+          res.status(200).json(
+            apiDataObject(null, false, 'User with such email allredy exist.')
+          );
+        }
+      });
   },
 
   post_sign_in: (req: any, res: any, next: any) => {
-    if (!req.body.password) return res.status(404).json({ message: 'Auth faild'});
-    console.log('login: ', req.body );
+    if (!req.body.password) return res.status(404).json({ message: 'Auth faild' });
+    console.log('login: ', req.body);
     User.find({ email: req.body.email })
       .exec()
-      .then((user:any) => {
-          if (user.length < 1) {
-            return res.status(200).json({
-              success: false,
-              message: 'Auth faild.'
-            });
-          }
-          if (!user[0].active) {
-            return res.status(200).json({
-              success: false,
-              message: 'Auth faild.'
-            });
-          }
-          bcrypt.compare(req.body.password, user[0].password)
-            .then(result => { 
-              if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
-              if (result) {
-                console.log('from signin: ', user);
-                const token = jwt.sign(
-                  { 
-                    email: user[0].email,
-                    role: user[0].role,
-                    fba: user[0].fba,
-                    userId: user[0]._id
-                  }, 
-                    process.env.JWT_KEY,
-                    {expiresIn: "96h"}
-                );
-                return res.status(200).json({ 
-                  success: true,
-                  _id: user[0]._id,
-                  name: user[0].email,
+      .then((user: any) => {
+        if (user.length < 1) {
+          return res.status(200).json({
+            success: false,
+            message: 'Auth faild.'
+          });
+        }
+        if (!user[0].active) {
+          return res.status(200).json({
+            success: false,
+            message: 'Auth faild.'
+          });
+        }
+        bcrypt.compare(req.body.password, user[0].password)
+          .then(result => {
+            if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
+            if (result) {
+              console.log('from signin: ', user);
+              const token = jwt.sign(
+                {
+                  email: user[0].email,
                   role: user[0].role,
                   fba: user[0].fba,
-                  authToken: token,
-                });
-              } else {
-                return res.status(200).json({
-                  success: false, 
-                  message: 'Auth faild'
-                });
-              }
-            })
-            .catch(err => { 
-              return res.status(500).json({ error: err});
-            });
+                  userId: user[0]._id
+                },
+                process.env.JWT_KEY,
+                { expiresIn: "96h" }
+              );
+              return res.status(200).json({
+                success: true,
+                _id: user[0]._id,
+                name: user[0].email,
+                role: user[0].role,
+                fba: user[0].fba,
+                rate: user[0].rate,
+                authToken: token,
+              });
+            } else {
+              return res.status(200).json({
+                success: false,
+                message: 'Auth faild'
+              });
+            }
+          })
+          .catch(err => {
+            return res.status(500).json({ error: err });
+          });
       })
       .catch(err => {
         console.log('catch', err);
-        return res.status(500).json({ error: err});
+        return res.status(500).json({ error: err });
       });
   },
 
   get_users_list: (req: any, res: any, next: any) => {
-      User.find()
-        .exec()
-        .then(users => {
-          if (users) {
-            res.status(200).json(users);
-          } else {
-            res.status(404).json({ message: 'No valid users.'})
-          } 
-        })
-        .catch( err => { 
-          res.status(500).json({ erorr: err })
-        });
+    User.find()
+      .exec()
+      .then(users => {
+        if (users) {
+          res.status(200).json(users);
+        } else {
+          res.status(404).json({ message: 'No valid users.' })
+        }
+      })
+      .catch(err => {
+        res.status(500).json({ erorr: err })
+      });
   },
 
   get_one_user: (req: any, res: any, next: any) => {
@@ -140,14 +143,14 @@ const controller = {
       .exec()
       .then((user: any) => {
         if (user.length) {
-          user[0].password =null;
+          user[0].password = null;
           res.status(200).json(user[0]);
-          } else {
+        } else {
           res.status(404).json({
             message: "User not found."
           })
         }
-    })
+      })
       .catch(err => {
         //TODO: Create error handler. Do not send error 500 in production server.
         res.status(500).json({
@@ -157,15 +160,12 @@ const controller = {
   },
 
   patch_one_user: (req: any, res: any, next: any) => {
-    
-    console.log('body from patch user: ', req.body);
-
     const id = req.body.id;
     const name = req.body.name;
     const email = req.body.email;
     User.updateOne(
       { _id: id },
-      {name: name, email: email}
+      { name: name, email: email }
     )
       .exec()
       .then((doc: any) => {
@@ -179,7 +179,7 @@ const controller = {
             message: 'User not found.'
           });
         }
-    })
+      })
       .catch(err => {
         res.status(500).json({
           error: err
@@ -187,8 +187,8 @@ const controller = {
       });
   },
 
-  del_one_user: (req: any, res: any, next: any) => {
-    const id = req.body.id;
+  del_one_user: (req: express.Request, res: express.Response, next: NextFunction) => {
+    const id = (req.body) ? req.body.id : 0;
     User.remove({ _id: id })
       .exec()
       .then((doc: any) => {
@@ -202,7 +202,7 @@ const controller = {
             message: 'User not found.'
           });
         }
-    })
+      })
       .catch(err => {
         res.status(500).json({
           error: err
