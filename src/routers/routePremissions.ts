@@ -14,6 +14,8 @@ const premissinons = [
   { path: '/user/one', method: 'DELETE', premited: 1 },
   { path: '/manager/add-item', method: 'POST', premited: 3 },
   { path: '/manager/items', method: 'GET', premited: 3 },
+  { path: '/manager/parse', method: 'GET', premited: 3 },
+  { path: '/manager/amazon-item', method: 'GET', premited: 3 },
   { path: '/manager/item', method: 'PATCH', premited: 3 },
   { path: '/manager/check-item', method: 'GET', premited: 3 },
   { path: '/supervisor/get-free', method: 'GET', premited: 2 },
