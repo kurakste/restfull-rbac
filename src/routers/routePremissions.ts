@@ -17,6 +17,7 @@ const premissinons = [
   { path: '/manager/parse', method: 'GET', premited: 3 },
   { path: '/manager/amazon-item', method: 'GET', premited: 3 },
   { path: '/manager/item', method: 'PATCH', premited: 3 },
+  { path: '/manager/item', method: 'DELETE', premited: 3 },
   { path: '/manager/check-item', method: 'GET', premited: 3 },
   { path: '/supervisor/get-free', method: 'GET', premited: 2 },
   { path: '/supervisor/get-my-items', method: 'GET', premited: 2 },
