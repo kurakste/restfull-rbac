@@ -1,13 +1,21 @@
 import controller from "../controllers/ManagerController";
 
-const debugMessageLogger = (module: string, info: string, err: Error|null = null) => {
-  console.log(`---------------------------------------------------------------------`)
-  console.log(`-----------Debug information from: ${module} ---------`);
-  console.log(`Info: ${info}`);
-  if (err) {
-    console.log('error: ', err);
+const debugMessageLogger =
+  (
+    module: string,
+    info?: Array<string> | string | object,
+    err: Error | null = null
+  ) => {
+    console.log(`----Debug information from: ${module} --`);
+    if (Array.isArray(info)) {
+      info.map(el => console.log(el));
+    } else {
+      console.log(info);
+    };
+    if (err) {
+      console.log('error: ', err);
+    }
+    //console.log(`-------------------------`)
   }
-  console.log(`---------------------------------------------------------------------`)
-}
 
 export default debugMessageLogger;
