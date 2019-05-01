@@ -1,6 +1,7 @@
 import needle from 'needle';
 import cheerio from 'cheerio';
 import AmazonProductProfile from '../../interfaces/AmazonProfile';
+import cl from '../../helpers/debugMessageLoger';
 const userAg = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
   'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)',
@@ -21,7 +22,7 @@ const cleaner = (input: string): string => {
 }
 
 const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
-  console.log('we parser iid:', iid);
+  cl('we parser iid:', iid);
   const url = 'https://www.amazon.com/dp/';
   const userAgIdx = Math.floor(Math.random() * (userAg.length - 1));
   const getData = async () => {
@@ -77,7 +78,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
         const pdet = $(el); //$('#detailBullets'); //('#productDetails_detailBullets_sections1');
         return product.detail = cleaner(pdet.text());
       })
-      console.log('prod detail: ', parsed);
       const reg = /ASIN:?\s*(\S+)/i 
       const filtered = parsed.filter(el => (el!=='' && el.match(reg)));
       return (filtered[0]) ? filtered[0] : '';
@@ -97,7 +97,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     const getBsr = (input:string):string => {
       const reg = /Best\s*Sellers\s*Rank\s*:?\s*#(\d+,?\d*)/i 
       const res = input.match(reg);
-      console.log('bsr: ', res ? res[1]: '');
       return res ? res[1]: '';
     }
 
@@ -105,7 +104,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     product.asin = getASIN(product.detail);
     product.bsr = getBsr(product.detail);
     getWight(product.detail);
-    console.log('bsr: ', product.bsr);
     return product;
   }
   const data = await getData()
