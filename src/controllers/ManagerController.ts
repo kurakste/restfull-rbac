@@ -5,7 +5,7 @@ import Amazon from '../model/amazon';
 import getCurrentUser from '../helpers/getCurrentUser';
 import amazonParser from '../console/logic/AmazonParser';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
-import dm from '../helpers/debugMessageLoger';
+import cl from '../helpers/debugMessageLoger';
 import downloadimages from '../helpers/amazonDownloadImages';
 
 const ps = (input: string): number => {
@@ -15,27 +15,18 @@ const ps = (input: string): number => {
 }
 
 const controller = {
-  /**
-   *  In body we have to gets this data: 
-   *  { name, link1, link2, id, roi }
-   *  */
-  post_add_items: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  post_add_items: async (req: express.Request, res: express.Response)
+    : Promise<void> => {
     const user = getCurrentUser(req);
-    const {
-      id, fba, lamazon, lsupplier, bsr, amazon, supplier,
-      commission, delivery, profit, margin, icomment
-    } = req.body;
-    if (!id) res.status(406).json({
-      message: "id- fields is required"
-    });
+    const { id, lamazon, lsupplier, bsr, fba, minpurchase,  amazon, supplier,
+      reffee, fbafee, delivery, profit, margin, icomment, images } = req.body;
+    
+    if (!id) HttpErrorHandler(res, 'add item', new Error('id is required'));
 
     const item = new Item({
       _id: mongoose.Types.ObjectId(),
-      id, fba, lamazon, lsupplier, bsr, amazon, supplier,
-      commission, delivery, profit, margin, icomment,
+      id, fba, minpurchase, lamazon, lsupplier, bsr, amazon, supplier,
+      reffee, fbafee, delivery, profit, margin, icomment, images,
       createdat: Date(),
       createdby: user.userId
     });
@@ -54,18 +45,20 @@ const controller = {
     req: express.Request,
     res: express.Response,
   ): Promise<void> => {
+    cl('patch_item', req.body);
     const {
-      id, fba, lamazon, lsupplier, bsr, amazon,
+      _id, id, fba, minpurchase, lamazon, lsupplier, bsr, amazon,
       supplier, commission, delivery, profit,
       margin, icomment
     } = req.body;
 
-    Item.findOne({ id: id })
+    Item.findOne({ _id: _id })
       .then((item: any) => {
         item.id = id;
         item.fba = fba;
         item.lamazon = lamazon;
         item.lsupplier = lsupplier;
+        item.minpurchase = ps(minpurchase);
         item.bsr = ps(bsr);
         item.amazon = ps(amazon);
         item.supplier = ps(supplier);
@@ -81,6 +74,24 @@ const controller = {
       })
       .catch(err => {
         HttpErrorHandler(res, 'patch_item', err);
+      });
+  },
+
+  delete_item: async (
+    req: express.Request,
+    res: express.Response,
+  ): Promise<void> => {
+    cl('delete_item', req.body);
+    const {
+      _id,
+    } = req.body;
+
+    Item.deleteOne({ _id: _id })
+      .then((result: any) => {
+        res.status(200).json(result);
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'delete_item', err);
       });
   },
 
@@ -130,24 +141,17 @@ const controller = {
         HttpErrorHandler(res, 'get_check_item', err);
       });
   },
-  get_parse: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  get_parse: async (req: express.Request, res: express.Response,): Promise<void> => {
     const id = req.query.id;
-    const data = await amazonParser(id);
-    if (data.title !== '') {
-      try {
-        await Amazon.findOne({ id: id }).remove().exec();
-        const amazon = new Amazon({ _id: mongoose.Types.ObjectId(), ...data });
-        const res = amazon.save();
-        dm('get_parse', `save result is: ${res}`)
-        downloadimages(data.images);
-      } catch(error) {
-        HttpErrorHandler(res, 'get_amazon_item', error)
-      }
-    }
-    res.status(200).json({ message: 'Ok', data: data });
+    amazonParser(id)
+      .then(async data => {
+        cl('parsed data: ', data);
+        await downloadimages(data.images);
+        res.status(200).json({ message: 'Ok', data: data });
+      }) 
+      .catch(error => {
+        HttpErrorHandler(res, 'parse_amazon_item', error)
+      })
   },
 
   get_amazon_item: async (
@@ -158,7 +162,6 @@ const controller = {
     Amazon.findOne({ id: id })
       .exec()
       .then(data => {
-        console.log('sending amazon string: ', data)
         res.status(200).json({ message: 'Ok', data: data });
       })
       .catch(error => {

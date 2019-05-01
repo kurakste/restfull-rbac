@@ -1,14 +1,15 @@
 import fs from 'fs';
 import request from 'request';
 
-const imgDownloader = (
-  uri:string, 
-  filename:string, 
-  callback:any
-  ) => {
-  console.log('current dir: ', __dirname);
-  request.head(uri, function(err, res, body){
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+const imgDownloader = async ( uri: string, filename: string, callback: any) => {
+  return new Promise((resolve) => {
+    request.head(uri, function(err, res, body) {
+      request(uri).pipe(fs.createWriteStream(filename)).on('close', () => {
+        callback();
+        return resolve();
+      });
+    });
+
   });
 };
 
