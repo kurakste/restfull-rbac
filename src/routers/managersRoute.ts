@@ -7,7 +7,6 @@ router.patch('/item', ManagerController.patch_item);
 router.delete('/item', ManagerController.delete_item);
 router.get('/items', ManagerController.get_all_items);
 router.get('/parse', ManagerController.get_parse);
-router.get('/amazon-item', ManagerController.get_amazon_item);
 router.get('/check-item', ManagerController.get_check_item);
 
 export default router;

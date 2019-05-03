@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Item from '../model/item';
-import Amazon from '../model/amazon';
+//import Amazon from '../model/amazon';
 import getCurrentUser from '../helpers/getCurrentUser';
 import amazonParser from '../console/logic/AmazonParser';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
@@ -154,20 +154,20 @@ const controller = {
       })
   },
 
-  get_amazon_item: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
-    const id = req.query.id;
-    Amazon.findOne({ id: id })
-      .exec()
-      .then(data => {
-        res.status(200).json({ message: 'Ok', data: data });
-      })
-      .catch(error => {
-        HttpErrorHandler(res, 'get_amazon_item', error)
-      })
-  },
+  // get_amazon_item: async (
+  //   req: express.Request,
+  //   res: express.Response,
+  // ): Promise<void> => {
+  //   const id = req.query.id;
+  //   Amazon.findOne({ id: id })
+  //     .exec()
+  //     .then(data => {
+  //       res.status(200).json({ message: 'Ok', data: data });
+  //     })
+  //     .catch(error => {
+  //       HttpErrorHandler(res, 'get_amazon_item', error)
+  //     })
+  // },
 
 }
 
