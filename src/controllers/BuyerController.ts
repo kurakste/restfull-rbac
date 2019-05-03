@@ -75,25 +75,27 @@ const controller = {
             });
           });
       });
-  
-  }, 
 
-  patch_item: async (req: express.Request, res: express.Response): Promise<void> => {
-    cl('buyer.patch_item', req.body);
+  },
+
+  patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
     const {
-      _id, lsupplier, amazon, supplier, 
-      fbafee, delivery, profit, margin, buyerscomment
+      _id, lsupplier, amazon, supplier, fbafee, delivery, profit, margin,
+      buyerscomment, status, fbaamount,
     } = req.body;
-
+    
+    cl('buyer.patch_item', [req.body, ps(status)]);
     Items.findOne({ _id: _id })
       .then((item: any) => {
         item.lsupplier = lsupplier;
+        item.status = ps(status);
         item.amazon = ps(amazon);
         item.supplier = ps(supplier);
         item.fbafee = ps(fbafee);
         item.delivery = ps(delivery);
         item.profit = ps(profit);
         item.margin = ps(margin);
+        item.fbaamount =ps(fbaamount);
         item.buyerscomment = buyerscomment;
         item.save()
           .then((result: any) => {

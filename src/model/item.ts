@@ -50,6 +50,7 @@ const itemSchema = new mongoose.Schema({
   images: { type: Array },
   buyer: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false }, 
   buyerscomment: { type: String, reqierd: false },
+  fbaamount:{ type: Number, reqierd: false }, 
 });
 
 export default mongoose.model('items', itemSchema);
