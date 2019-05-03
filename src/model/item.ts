@@ -40,10 +40,6 @@ const itemSchema = new mongoose.Schema({
   checkednotes: { type: String, reqierd: false },
   checkedat: { type: Date, reqierd: true },
   status: { type: Number, reqierd: false,default: Istatus.newitem },
-  managerFine: { type: Number, required: false},
-  managerFineComment: { type: String, reqierd: false },
-  supervisorFine: { type: Number, required: false},
-  supervisorFineComment: { type: String, reqierd: false },
   // Data whent the payment was made.
   paidat: { type: Date, reqierd: false },
   //Who made this payment.
@@ -53,7 +49,12 @@ const itemSchema = new mongoose.Schema({
   buyerscomment: { type: String, reqierd: false },
   fbaamount:{ type: Number, reqierd: false }, 
   fbalink: { type: String, reqierd: false }, 
+  dircheckedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
   dirdecision: { type: Number, reqierd: false, default: DirStatus.newitem },
+  managerFine: { type: Number, required: false},
+  managerFineComment: { type: String, reqierd: false },
+  supervisorFine: { type: Number, required: false},
+  supervisorFineComment: { type: String, reqierd: false },
 });
 
 export default mongoose.model('items', itemSchema);

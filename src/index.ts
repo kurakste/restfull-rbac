@@ -2,7 +2,7 @@ import express from 'express';
 import userRouter from './routers/user';
 import managersRoutes from './routers/managersRoute';
 import superviserRoutes from './routers/supervisorRoute';
-import adminRoutes from './routers/adminRoute';
+import directorRoutes from './routers/directorRoute';
 import buyerRouter from './routers/buyerRouter';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
 app.use('/user', userRouter);
 app.use('/manager', managersRoutes);
 app.use('/supervisor', superviserRoutes);
-app.use('/admin', adminRoutes);
+app.use('/director', directorRoutes);
 app.use('/buyer', buyerRouter);
 
 app.use((req, res, next) => {
