@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Istatus from '../interfaces/itemstatus';
+import DirStatus from '../interfaces/dirstatus';
 
 const itemSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
@@ -51,6 +52,8 @@ const itemSchema = new mongoose.Schema({
   buyer: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false }, 
   buyerscomment: { type: String, reqierd: false },
   fbaamount:{ type: Number, reqierd: false }, 
+  fbalink: { type: String, reqierd: false }, 
+  dirdecision: { type: Number, reqierd: false, default: DirStatus.newitem },
 });
 
 export default mongoose.model('items', itemSchema);
