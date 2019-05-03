@@ -7,15 +7,13 @@
 const premissinons = [
   { path: '/user/signin', method: 'POST', premited: 5 },
   { path: '/user/signup', method: 'POST', premited: 5 },
-  { path: '/watcher/products', method: 'GET', premited: 4 },
-  { path: '/user/list', method: 'GET', premited: 1 },
-  { path: '/user/one', method: 'GET', premited: 3 },
-  { path: '/user/one', method: 'PATCH', premited: 3 },
-  { path: '/user/one', method: 'DELETE', premited: 1 },
+  { path: '/buyer/free-products', method: 'GET', premited: 4 },
+  { path: '/buyer/products', method: 'GET', premited: 4 },
+  { path: '/buyer/pickup-product', method: 'POST', premited: 4 },
+  { path: '/buyer/product', method: 'PATCH', premited: 4 },
   { path: '/manager/add-item', method: 'POST', premited: 3 },
   { path: '/manager/items', method: 'GET', premited: 3 },
   { path: '/manager/parse', method: 'GET', premited: 3 },
-  { path: '/manager/amazon-item', method: 'GET', premited: 3 },
   { path: '/manager/item', method: 'PATCH', premited: 3 },
   { path: '/manager/item', method: 'DELETE', premited: 3 },
   { path: '/manager/check-item', method: 'GET', premited: 3 },
@@ -31,6 +29,10 @@ const premissinons = [
   { path: '/admin/user', method: 'DELETE', premited: 1 },
   { path: '/admin/item', method: 'PATCH', premited: 1 },
   { path: '/admin/make-items-paid', method: 'POST', premited: 1 },
+  { path: '/user/list', method: 'GET', premited: 1 },
+  { path: '/user/one', method: 'DELETE', premited: 1 },
+  { path: '/user/one', method: 'GET', premited: 3 },
+  { path: '/user/one', method: 'PATCH', premited: 3 },
 ]
 
 export default premissinons;

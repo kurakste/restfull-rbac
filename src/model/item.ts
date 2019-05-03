@@ -48,6 +48,8 @@ const itemSchema = new mongoose.Schema({
   //Who made this payment.
   paidby:  { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
   images: { type: Array },
+  buyer: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false }, 
+  buyerscomment: { type: String, reqierd: false },
 });
 
 export default mongoose.model('items', itemSchema);
