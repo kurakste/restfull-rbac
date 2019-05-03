@@ -81,7 +81,7 @@ const controller = {
   patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
     const {
       _id, lsupplier, amazon, supplier, fbafee, delivery, profit, margin,
-      buyerscomment, status, fbaamount,
+      buyerscomment, status, fbaamount, fbalink,
     } = req.body;
     
     cl('buyer.patch_item', [req.body, ps(status)]);
@@ -97,6 +97,7 @@ const controller = {
         item.margin = ps(margin);
         item.fbaamount =ps(fbaamount);
         item.buyerscomment = buyerscomment;
+        item.fbalink = fbalink;
         item.save()
           .then((result: any) => {
             res.status(200).json(result);
