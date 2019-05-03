@@ -1,8 +1,9 @@
 enum Roles {
-  admin = 0,
-  super = 1,
-  user = 3,
-  watcher = 4,  
+  root = 0,
+  director = 1,
+  super = 2,
+  manager = 3,
+  buyer = 4,  
   candidate = 5,  
 };
 
