@@ -48,7 +48,7 @@ const controller = {
     cl('patch_item', req.body);
     const {
       _id, id, fba, minpurchase, lamazon, lsupplier, bsr, amazon,
-      supplier, commission, delivery, profit,
+      supplier, reffee, fbafee, delivery, profit,
       margin, icomment
     } = req.body;
 
@@ -62,7 +62,8 @@ const controller = {
         item.bsr = ps(bsr);
         item.amazon = ps(amazon);
         item.supplier = ps(supplier);
-        item.commission = ps(commission);
+        item.reffee = ps(reffee);
+        item.fbafee = ps(fbafee);
         item.delivery = ps(delivery);
         item.profit = ps(profit);
         item.margin = ps(margin);
