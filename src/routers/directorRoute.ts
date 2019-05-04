@@ -4,6 +4,10 @@ import directorController from '../controllers/DirectorController';
 
 router.get('/users', directorController.get_all_users);
 router.get('/vac', directorController.get_vac_product);
+router.get('/my-products', directorController.get_my_products);
+router.patch('/product', directorController.patch_product);
+router.post('/pickup', directorController.post_pickup_item);
+router.post('/make-payment', directorController.post_make_payment);
 router.get('/get-all-checked-items', directorController.get_all_checked_items);
 router.get('/get-all-free-items', directorController.get_all_free_items);
 router.patch('/item', directorController.patch_item);
