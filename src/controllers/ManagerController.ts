@@ -141,6 +141,7 @@ const controller = {
         HttpErrorHandler(res, 'get_check_item', err);
       });
   },
+  
   get_parse: async (req: express.Request, res: express.Response,): Promise<void> => {
     const id = req.query.id;
     amazonParser(id)
@@ -153,21 +154,6 @@ const controller = {
         HttpErrorHandler(res, 'parse_amazon_item', error)
       })
   },
-
-  // get_amazon_item: async (
-  //   req: express.Request,
-  //   res: express.Response,
-  // ): Promise<void> => {
-  //   const id = req.query.id;
-  //   Amazon.findOne({ id: id })
-  //     .exec()
-  //     .then(data => {
-  //       res.status(200).json({ message: 'Ok', data: data });
-  //     })
-  //     .catch(error => {
-  //       HttpErrorHandler(res, 'get_amazon_item', error)
-  //     })
-  // },
 
 }
 
