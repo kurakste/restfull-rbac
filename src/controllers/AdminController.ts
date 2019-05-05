@@ -1,7 +1,6 @@
 import Users from '../model/users';
 import express from 'express';
 import Items from '../model/item';
-import apiDataObject from '../helpers/apiDataObject';
 import getCurrentUser from '../helpers/getCurrentUser';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
@@ -15,7 +14,7 @@ const ps = (input: string): number => {
 const controller = {
 
   get_vac_product: (req: express.Request, res: express.Response): void => {
-    cl('director.get_vac_product');
+    cl('admin.get_vac_product');
     const user = getCurrentUser(req);
     let param;
     if (user.fba) {
@@ -34,7 +33,7 @@ const controller = {
     Items.find(param)
       .exec()
       .then(data => {
-        cl('director.get_vac_product.selected', data);
+        //cl('admin.get_vac_product.selected', data);
         return res.status(200).json(data);
       })
       .catch(err => {
@@ -42,14 +41,15 @@ const controller = {
       });
   },
 
-  get_my_products: (req: express.Request, res: express.Response): void => {
+  get_checking_products: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
-    cl('superviser.get_my_item: ');
+    cl('admin.get_checking_item: ');
     Items.find({
-      dircheckedby: user.userId,
+      dircheckedby: {$ne: null},
       paidat: null,
     })
       .populate('createdby')
+      .populate('dircheckedby')
       .exec()
       .then(data => {
         //    console.log('Data from super: ', data);
@@ -62,12 +62,12 @@ const controller = {
 
   get_paid: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
-    cl('directot.get_paid: ');
+    cl('admin.get_paid!: ');
     Items.find({
-      dircheckedby: user.userId,
-      paidat: {$ne: null},
+      paidat: { $ne: null },
     })
       .populate('createdby')
+      .populate('dircheckedby')
       .exec()
       .then(data => {
         return res.status(200).json(data);
@@ -79,7 +79,7 @@ const controller = {
 
   post_pickup_item: (req: express.Request, res: express.Response): void => {
     const iid = req.body.iid;
-    cl('director.post_pickup_item', iid);
+    cl('admin.post_pickup_item', iid);
     Items.findOne({
       _id: iid
     })
@@ -97,7 +97,7 @@ const controller = {
         data.dircheckedby = user.userId;
         data.save()
           .then((data: any) => {
-            cl('director.post_pickup_item saved:', data);
+            cl('admin.post_pickup_item saved:', data);
             return res.status(200).json({
               result: true,
               data: data
@@ -110,7 +110,7 @@ const controller = {
   },
 
   patch_product: (req: express.Request, res: express.Response): void => {
-    cl('director.patch_item:', req.body);
+    cl('admin.patch_item:', req.body);
     const { _id, managerFine, managerFineComment, supervisorFine,
       supervisorFineComment, dirdecision,
     } = req.body;
@@ -137,10 +137,10 @@ const controller = {
   },
 
   post_make_payment: (req: express.Request, res: express.Response): void => {
-    cl('direktor.make_payment', req.body);
+    cl('admin.make_payment', req.body);
     const ids = req.body.products;
     if (!Array.isArray(ids) || ids.length === 0) throw new Error('We needed array of _ids here');
-    cl('direktor.make_payment', ids);
+    cl('admin.make_payment', ids);
 
 
     Items.updateMany({ _id: { $in: ids } }, { paidat: Date() })
@@ -155,6 +155,7 @@ const controller = {
       });
 
   },
+
   get_all_users: (req: any, res: any): void => {
     Users.find({
     })
@@ -171,13 +172,13 @@ const controller = {
         HttpErrorHandler(res, 'dir_get_all_users', err);
       });
   },
+
   patch_user: (req: express.Request, res: express.Response): void => {
-    console.log('input in patch: ', req.body);
+    cl('Admin, input in patch: ', req.body);
     const uid = req.body._id;
     if (!uid) res.status(400).json({
       message: 'We need user id as uid at least.'
     });
-    console.log('active:');
     const name = req.body.name;
     const rate = parseFloat(req.body.rate);
     const role = parseInt(req.body.role);
@@ -206,9 +207,7 @@ const controller = {
           });
       })
       .catch(err => {
-        return res.status(500).json({
-          error: err
-        });
+        HttpErrorHandler(res, 'dir_get_all_users', err);
       });
 
   },
@@ -234,116 +233,8 @@ const controller = {
         });
       })
       .catch(err => {
-        return res.status(500).json({
-          error: err
-        });
+        HttpErrorHandler(res, 'dir_get_all_users', err);
       });
-
-  },
-
-  get_all_checked_items: (req: express.Request, res: express.Response): void => {
-    Items.find({
-      checkedby: { $ne: null },
-      paid_at: null,
-    })
-      .populate('createdby')
-      .populate('checkedby')
-      .exec()
-      .then(data => {
-        return res.status(200).json(apiDataObject(data, true));
-      })
-      .catch(err => {
-        console.log(err)
-        return res.status(200).json(apiDataObject(null, false, 'Api error'));
-      });
-
-  },
-
-  get_all_free_items: (req: express.Request, res: express.Response): void => {
-    Items.find({ checkedby: null })
-      .populate('createdby')
-      .exec()
-      .then(data => {
-        console.log(data);
-        return res.status(200).json(apiDataObject(data, true));
-      })
-      .catch(err => {
-        console.log(err)
-        return res.status(200).json(apiDataObject(null, false, 'Api error :-('));
-      });
-
-  },
-
-  patch_item: (req: express.Request, res: express.Response): void => {
-    //const user = getCurrentUser(req); 
-    console.log('manager patch_item:', req.body);
-    const {
-      _id, status, supervisorFine,
-      supervisorFineComment, managerFine, managerFineComment
-    } = req.body;
-
-    Items.findOne({ _id: _id })
-      .then((item: any) => {
-        item.status = status;
-        item.supervisorFineComment = supervisorFineComment;
-        item.supervisorFine = supervisorFine;
-        item.managerFine = managerFine;
-        item.managerFineComment = managerFineComment;
-        item.save()
-          .then((result: any) => {
-            console.log('patch result: ', result);
-            return res.status(200).json({
-              result: true,
-              data: result,
-            });
-          });
-      })
-      .catch(err => {
-        return res.status(500).json({
-          result: false,
-          message: "error in databese",
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  },
-  /**
-   *  It gets array of items id wich hase to be marked as 
-   *  paid. In database paid items have paid_at date. If that field null - 
-   *  the item is not paid, if it hase date - it hase been paid. 
-   */
-  pos_make_items_paid: (req: express.Request, res: express.Response): void => {
-    console.log('We in the make items paid controller', req.body);
-    if (
-      (!req.body.payload) ||
-      (!Array.isArray(req.body.payload)) ||
-      (req.body.payload.length === 0)
-    ) {
-      res.status(200).json({
-        success: true,
-        message: 'It seems like array was empty.',
-      });
-    }
-
-    Items.updateMany(
-      { _id: { $in: req.body.payload } },
-      { $set: { paid_at: Date() } }
-    )
-      .then((result) => {
-        console.log('successfull result with db: ', result);
-        return res.status(200).json({
-          success: true,
-          message: 'Hi, all was excelent!!!',
-        });
-      })
-      .catch((err) => {
-        console.log('db error happenes: ', err);
-        return res.status(200).json({
-          success: true,
-          message: 'Some thing goes wrong....',
-        });
-      })
 
   },
 
