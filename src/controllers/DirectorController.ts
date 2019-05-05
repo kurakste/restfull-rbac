@@ -21,15 +21,15 @@ const controller = {
     let param;
     if (user.fba) {
       param = {
-        //fba super get both fab & non fba items.
+        //fba dir get both fab & non fba items.
         dircheckedby: null,
-        status: { $in: [1, 2] }
+        status: { $in: [1, 2, 4] }
       }
     } else {
       param = {
         fba: false,
         dircheckedby: null,
-        status: { $in: [1, 2] }
+        status: { $in: [1, 2, 4] }
       }
     }
     Items.find(param)
