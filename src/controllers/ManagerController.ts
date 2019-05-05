@@ -104,7 +104,7 @@ const controller = {
     const user = getCurrentUser(req);
     Item.find({
       createdby: user.userId,
-      paid_at: null,
+      paidat: null,
     })
       .populate('users')
       .populate('chekedby')
