@@ -2,11 +2,13 @@ import Item from '../model/item';
 import getCurrentUser from '../helpers/getCurrentUser';
 import ItemStatus from '../interfaces/itemstatus';
 import cl from '../helpers/debugMessageLoger';
+import HttpErrorHandler from '../helpers/HttpErrorHandler';
+
 const controller = {
 
   get_free: (req: any, res: any, next: Function): void => {
     const user = getCurrentUser(req);
-    console.log('get free user:', user);
+    cl('super.get_free:', user);
     let param;
     if (user.fba) {
       param = {
@@ -25,14 +27,14 @@ const controller = {
         return res.status(200).json(data);
       })
       .catch(err => {
-        return res.status(500).json({ error: err });
+        HttpErrorHandler(res, 'Suprvisor.get_free', err);
       });
 
   },
 
   get_my_items: (req: any, res: any, next: Function): void => {
     const user = getCurrentUser(req);
-    cl('superviser.get_my_item: ');
+    cl('supervisor.get_my_item: ');
     Item.find({
       checkedby: user.userId
     })
@@ -43,13 +45,13 @@ const controller = {
         return res.status(200).json(data);
       })
       .catch(err => {
-        return res.status(500).json({ error: err });
+        HttpErrorHandler(res, 'Suprvisor.get_my_item', err);
       });
   },
 
   patch_item: (req: any, res: any, next: Function): void => {
     //const user = getCurrentUser(req); 
-    console.log('patch_item:', req.body);
+    cl('supervisor.patch_item', req.body);
     const { _id, status, checkednotes } = req.body;
 
     if ((status > 5) || (status < 0)) return res.status(200).json({
@@ -65,7 +67,7 @@ const controller = {
         item.checkedat = Date();
         item.save()
           .then((result: any) => {
-            console.log('patch result: ', result);
+            cl('supervisor.patch result: ', result);
             return res.status(200).json({
               result: true,
               data: result,
@@ -73,19 +75,13 @@ const controller = {
           });
       })
       .catch(err => {
-        return res.status(500).json({
-          result: false,
-          message: "error in databese",
-        });
-      })
-      .catch(err => {
-        console.log(err);
+        HttpErrorHandler(res, 'Suprvisor.patch_item', err);
       });
+      
   },
 
   post_pickup_item: (req: any, res: any, next: Function): void => {
     const iid = req.body.iid;
-    console.log('pickup:', iid);
     Item.findOne({
       _id: iid
     })
@@ -106,17 +102,13 @@ const controller = {
         data.checkedby = user.userId;
         data.save()
           .then((data: any) => {
-            console.log('saved', data);
             return res.status(200).json({
               result: true,
               data: data
             });
           })
           .catch((err: any) => {
-            return res.status(200).json({
-              result: false,
-              message: 'dbase error.'
-            });
+            HttpErrorHandler(res, 'Suprvisor.pickup_item', err); 
           });
       });
   },
@@ -147,10 +139,7 @@ const controller = {
           });
       })
       .catch((err: any) => {
-        console.log('we in error brnch(')
-        return res.status(500).json({
-          error: err
-        });
+        HttpErrorHandler(res, 'Suprvisor.change_status', err); 
       });
   }
 }
