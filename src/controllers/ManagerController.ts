@@ -106,7 +106,7 @@ const controller = {
       createdby: user.userId,
       paidat: null,
     })
-      .populate('users')
+      .populate('createdby')
       .populate('chekedby')
       .exec()
       .then(items => {
