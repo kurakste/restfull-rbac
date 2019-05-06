@@ -2,7 +2,8 @@ import express from 'express';
 const router = express.Router();
 import adminController from '../controllers/AdminController';
 
-router.get('/vac', adminController.get_vac_product);
+router.get('/waiting', adminController.get_waiting_products);
+router.get('/vac', adminController.get_vac_products);
 router.get('/checking', adminController.get_checking_products);
 router.get('/paid', adminController.get_paid);
 router.patch('/product', adminController.patch_product);

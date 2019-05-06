@@ -13,7 +13,22 @@ const ps = (input: string): number => {
 
 const controller = {
 
-  get_vac_product: (req: express.Request, res: express.Response): void => {
+  get_waiting_products: (req: express.Request, res: express.Response): void => {
+    cl('admin.get_waiting_product');
+
+    Items.find({ status: 0 })
+      .populate('createdby')
+      .exec()
+      .then(data => {
+        //cl('admin.get_vac_product.selected', data);
+        return res.status(200).json(data);
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'post_add_items', err);
+      });
+  },
+
+  get_vac_products: (req: express.Request, res: express.Response): void => {
     cl('admin.get_vac_product');
     const user = getCurrentUser(req);
     let param;
@@ -45,7 +60,7 @@ const controller = {
     const user = getCurrentUser(req);
     cl('admin.get_checking_item: ');
     Items.find({
-      dircheckedby: {$ne: null},
+      dircheckedby: { $ne: null },
       paidat: null,
     })
       .populate('createdby')
