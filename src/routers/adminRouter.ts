@@ -2,6 +2,7 @@ import express from 'express';
 const router = express.Router();
 import adminController from '../controllers/AdminController';
 
+router.get('/notpaid', adminController.get_notpaid_products);
 router.get('/waiting', adminController.get_waiting_products);
 router.get('/vac', adminController.get_vac_products);
 router.get('/checking', adminController.get_checking_products);

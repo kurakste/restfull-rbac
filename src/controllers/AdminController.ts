@@ -12,6 +12,21 @@ const ps = (input: string): number => {
 }
 
 const controller = {
+  get_notpaid_products: (req: express.Request, res: express.Response): void => {
+    cl('admin.get_notpaid_product');
+
+    Items.find({ paidat: null })
+      .populate('createdby')
+      .populate('checkedby')
+      .exec()
+      .then(data => {
+        //cl('admin.get_vac_product.selected', data);
+        return res.status(200).json(data);
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'post_add_items', err);
+      });
+  },
 
   get_waiting_products: (req: express.Request, res: express.Response): void => {
     cl('admin.get_waiting_product');

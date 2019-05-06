@@ -37,6 +37,7 @@ const premissinons = [
   { path: '/admin/user', method: 'PATCH', premited: 0 },
   { path: '/admin/user', method: 'DELETE', premited: 0 },
   { path: '/admin/waiting', method: 'GET', premited: 0 },
+  { path: '/admin/notpaid', method: 'GET', premited: 0 },
   { path: '/admin/vac', method: 'GET', premited: 0 },
   { path: '/admin/pickup', method: 'POST', premited: 0 },
   { path: '/admin/make-payment', method: 'POST', premited: 0 },
