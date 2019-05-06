@@ -50,6 +50,7 @@ const controller = {
       paidat: null,
     })
       .populate('createdby')
+      .populate('checkedby')
       .exec()
       .then(data => {
         //    console.log('Data from super: ', data);
