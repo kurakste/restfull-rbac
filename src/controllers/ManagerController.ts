@@ -1,12 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Item from '../model/item';
-//import Amazon from '../model/amazon';
 import getCurrentUser from '../helpers/getCurrentUser';
 import amazonParser from '../console/logic/AmazonParser';
-import HttpErrorHandler from '../helpers/HttpErrorHandler';
-import cl from '../helpers/debugMessageLoger';
 import downloadimages from '../helpers/amazonDownloadImages';
+import cl from '../helpers/debugMessageLoger';
+import HttpErrorHandler from '../helpers/HttpErrorHandler';
+import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
 
 const ps = (input: string): number => {
   const parsed = parseFloat(input);
@@ -15,7 +15,7 @@ const ps = (input: string): number => {
 }
 
 const controller = {
-  post_add_items: async (req: express.Request, res: express.Response)
+  post_add_product: async (req: express.Request, res: express.Response)
     : Promise<void> => {
     const user = getCurrentUser(req);
     const { id, lamazon, lsupplier, bsr, fba, minpurchase,  amazon, supplier,
@@ -41,10 +41,7 @@ const controller = {
       });
   },
 
-  patch_item: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  patch_product: async ( req: express.Request, res: express.Response ): Promise<void> => {
     cl('patch_item', req.body);
     const {
       _id, id, fba, minpurchase, lamazon, lsupplier, bsr, amazon,
@@ -78,10 +75,7 @@ const controller = {
       });
   },
 
-  delete_item: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  delete_product: async (req: express.Request, res: express.Response ): Promise<void> => {
     cl('delete_item', req.body);
     const {
       _id,
@@ -96,10 +90,7 @@ const controller = {
       });
   },
 
-  get_all_items: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  get_all_products: async (req: express.Request, res: express.Response): Promise<void> => {
 
     const user = getCurrentUser(req);
     Item.find({
@@ -117,10 +108,7 @@ const controller = {
       });
   },
 
-  get_check_item: async (
-    req: express.Request,
-    res: express.Response,
-  ): Promise<void> => {
+  get_check_product: async (req: express.Request, res: express.Response): Promise<void> => {
     const itemid = req.query.iid;
     Item.find({
       id: itemid,

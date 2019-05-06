@@ -2,11 +2,11 @@ import express from 'express';
 const router = express.Router();
 import ManagerController from '../controllers/ManagerController';
 
-router.post('/add-item', ManagerController.post_add_items);
-router.patch('/item', ManagerController.patch_item);
-router.delete('/item', ManagerController.delete_item);
-router.get('/items', ManagerController.get_all_items);
+router.post('/add-product', ManagerController.post_add_product);
+router.patch('/product', ManagerController.patch_product);
+router.delete('/product', ManagerController.delete_product);
+router.get('/products', ManagerController.get_all_products);
 router.get('/parse', ManagerController.get_parse);
-router.get('/check-item', ManagerController.get_check_item);
+router.get('/check-product', ManagerController.get_check_product);
 
 export default router;
