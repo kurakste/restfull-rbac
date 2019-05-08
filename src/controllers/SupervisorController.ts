@@ -34,7 +34,7 @@ const controller = {
 
   get_my_items: (req: any, res: any, next: Function): void => {
     const user = getCurrentUser(req);
-    cl('supervisor.get_my_item: ');
+    cl('supervisor.get_my_item: ', [22]);
     Item.find({
       checkedby: user.userId
     })

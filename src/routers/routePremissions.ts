@@ -13,9 +13,10 @@ const premissinons = [
   { path: '/manager/add-item', method: 'POST', premited: 3 },
   
   { path: '/manager/products', method: 'GET', premited: 3 },
-  { path: '/manager/parse', method: 'GET', premited: 3 },
+  { path: '/manager/product', method: 'POST', premited: 3 },
   { path: '/manager/product', method: 'PATCH', premited: 3 },
   { path: '/manager/product', method: 'DELETE', premited: 3 },
+  { path: '/manager/parse', method: 'GET', premited: 3 },
   { path: '/manager/check-product', method: 'GET', premited: 3 },
   
   { path: '/supervisor/get-free', method: 'GET', premited: 2 },

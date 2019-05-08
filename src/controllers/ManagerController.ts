@@ -101,7 +101,7 @@ const controller = {
       .populate('chekedby')
       .exec()
       .then(items => {
-        res.status(200).json(items);
+        HttpSuccessHandler(res, 'manager.get_all_products.items', items);
       })
       .catch(err => {
         HttpErrorHandler(res, 'get_all_items', err);

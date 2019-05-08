@@ -2,7 +2,7 @@ import express from 'express';
 const router = express.Router();
 import ManagerController from '../controllers/ManagerController';
 
-router.post('/add-product', ManagerController.post_add_product);
+router.post('/product', ManagerController.post_add_product);
 router.patch('/product', ManagerController.patch_product);
 router.delete('/product', ManagerController.delete_product);
 router.get('/products', ManagerController.get_all_products);
