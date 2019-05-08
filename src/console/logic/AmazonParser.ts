@@ -52,7 +52,7 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       if (link.search('images/I/') !== -1) {
         link = link.split('/')[5];
         let imageid = (link.split('.')[0]) ? link.split('.')[0] : '';
-        imageid = imageid.replace('%', '__'); // we cant use % as a part of file path...
+        imageid = imageid.replace(/%/g, '_'); // we cant use % as a part of file path...
         product.images.push(imageid);
       }
     });

@@ -18,9 +18,9 @@ const controller = {
   post_add_product: async (req: express.Request, res: express.Response)
     : Promise<void> => {
     const user = getCurrentUser(req);
-    const { id, lamazon, lsupplier, bsr, fba, minpurchase,  amazon, supplier,
+    const { id, lamazon, lsupplier, bsr, fba, minpurchase, amazon, supplier,
       reffee, fbafee, delivery, profit, margin, icomment, images } = req.body;
-    
+
     if (!id) HttpErrorHandler(res, 'add item', new Error('id is required'));
 
     const item = new Item({
@@ -41,7 +41,7 @@ const controller = {
       });
   },
 
-  patch_product: async ( req: express.Request, res: express.Response ): Promise<void> => {
+  patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
     cl('patch_item', req.body);
     const {
       _id, id, fba, minpurchase, lamazon, lsupplier, bsr, amazon,
@@ -75,7 +75,7 @@ const controller = {
       });
   },
 
-  delete_product: async (req: express.Request, res: express.Response ): Promise<void> => {
+  delete_product: async (req: express.Request, res: express.Response): Promise<void> => {
     cl('delete_item', req.body);
     const {
       _id,
@@ -108,37 +108,38 @@ const controller = {
       });
   },
 
-  get_check_product: async (req: express.Request, res: express.Response): Promise<void> => {
+  get_check_product: (req: express.Request, res: express.Response): void => {
     const itemid = req.query.iid;
     Item.find({
       id: itemid,
-      paid_at: null,
     })
       .exec()
       .then(items => {
         if (items.length > 0) {
-          return res.status(200).json({
-            isExist: true
-          });
+          HttpSuccessHandler(
+            res, 'manager.get_all_products.items',
+            { isExist: true }
+          );
         } else {
-          return res.status(200).json({
-            isExist: false
-          });
+          HttpSuccessHandler(
+            res, 'manager.get_all_products.items',
+            { isExist: false }
+          );
         }
       })
       .catch(err => {
         HttpErrorHandler(res, 'get_check_item', err);
       });
   },
-  
-  get_parse: async (req: express.Request, res: express.Response,): Promise<void> => {
+
+  get_parse: async (req: express.Request, res: express.Response, ): Promise<void> => {
     const id = req.query.id;
     amazonParser(id)
       .then(async data => {
         cl('parsed data: ', data);
         await downloadimages(data.images);
         res.status(200).json({ message: 'Ok', data: data });
-      }) 
+      })
       .catch(error => {
         HttpErrorHandler(res, 'parse_amazon_item', error)
       })

@@ -5,11 +5,11 @@ const downloadimages = async (items: any) => {
   if (!Array.isArray(items)) return;
   if (items.length === 0) return;
   const prombundle = items.map(async (el: string) => {
-    const elurl: string = el.replace('_', '%'); // i make this replacmente before
+    const url:string = el.replace(/_/g, '%'); // can't use % to store in fs.
     return imagDownloader(
-      `https://images-na.ssl-images-amazon.com/images/I/${elurl}._SX1500_.jpg`,
-      `./public/img/${el}.jpg`,
-      () => cl(`Downloding ./public/img/${el}.jpg is done`)
+      `https://images-na.ssl-images-amazon.com/images/I/${url}._SX1500_.jpg`,
+      `./public/img/${url}.jpg`,
+      () => cl(`Downloding ./public/img/${el}.jpg is done`, url)
     )
   });
   await Promise.all(prombundle)
