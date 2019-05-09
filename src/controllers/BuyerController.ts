@@ -4,6 +4,7 @@ import ItemStatus from '../interfaces/itemstatus';
 import getCurrentUser from '../helpers/getCurrentUser';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
+import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
 
 const ps = (input: string): number => {
   const parsed = parseFloat(input);
@@ -17,10 +18,10 @@ const controller = {
     Items.find({ status: ItemStatus.forfba, buyer: null })
       .exec()
       .then(data => {
-        return res.status(200).json(data);
+        HttpSuccessHandler(res, 'buyer.get_free_products', data);
       })
       .catch(err => {
-        return res.status(500).json({ error: err });
+        HttpErrorHandler(res, 'buyer.get_free_products', err);
       });
 
   },
@@ -30,10 +31,10 @@ const controller = {
     Items.find({ buyer: user.userId })
       .exec()
       .then(data => {
-        return res.status(200).json(data);
+        HttpSuccessHandler(res, 'buyer.get_products', data);
       })
       .catch(err => {
-        return res.status(500).json({ error: err });
+        HttpErrorHandler(res, 'buyer.get_products', err);
       });
 
   },
@@ -47,35 +48,26 @@ const controller = {
     })
       .exec()
       .then((data: any) => {
-        if (!data) return res.status(404).json({
-          message: 'The item is not found.'
-        });
+        if (!data) HttpErrorHandler(
+          res, 'buyer.pickup_products', new Error('The item is not found.')
+        );
+        
         // Was the item picked up by another buyer?
         // There is a time lag betwin moment when user gets list 
         // of items & when he will try to pick up an item. 
-        if (data.buyer) return res.status(200).json({
-          result: false,
-          message: 'The item was blocked by another buyer.'
-        });
+        if (data.buyer) HttpErrorHandler(
+          res, 'buyer.pickup_products', new Error('The item was blocked by another buyer.')
+        );
 
         const user = getCurrentUser(req);
         data.buyer = user.userId;
         data.save()
           .then((data: any) => {
-            cl('buyer.pickup.saved', data);
-            return res.status(200).json({
-              result: true,
-              data: data
-            });
+            cl('buyer.pickup_products', data);
+            HttpSuccessHandler(res, 'buyer.get_products', data);
           })
-          .catch((err: any) => {
-            return res.status(200).json({
-              result: false,
-              message: 'dbase error.'
-            });
-          });
+          .catch((err: any) => HttpErrorHandler(res, 'buyer.pickup_products', err));
       });
-
   },
 
   patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
@@ -83,7 +75,7 @@ const controller = {
       _id, lsupplier, amazon, supplier, fbafee, delivery, profit, margin,
       buyerscomment, status, fbaamount, fbalink,
     } = req.body;
-    
+
     cl('buyer.patch_item', [req.body, ps(status)]);
     Items.findOne({ _id: _id })
       .then((item: any) => {
@@ -95,7 +87,7 @@ const controller = {
         item.delivery = ps(delivery);
         item.profit = ps(profit);
         item.margin = ps(margin);
-        item.fbaamount =ps(fbaamount);
+        item.fbaamount = ps(fbaamount);
         item.buyerscomment = buyerscomment;
         item.fbalink = fbalink;
         item.save()
