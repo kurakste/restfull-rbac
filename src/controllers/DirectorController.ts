@@ -5,6 +5,7 @@ import apiDataObject from '../helpers/apiDataObject';
 import getCurrentUser from '../helpers/getCurrentUser';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
+import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
 
 const ps = (input: string): number => {
   const parsed = parseFloat(input);
@@ -33,18 +34,15 @@ const controller = {
     }
     Items.find(param)
       .exec()
-      .then(data => {
-        cl('director.get_vac_product.selected', data);
-        return res.status(200).json(data);
-      })
+      .then(data => HttpSuccessHandler(res, 'director.get_vac_product', data))
       .catch(err => {
-        HttpErrorHandler(res, 'post_add_items', err);
+        HttpErrorHandler(res, 'director.get_vac_product', err);
       });
   },
 
   get_my_products: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
-    cl('superviser.get_my_item: ');
+    cl('director.get_my_item: ');
     Items.find({
       dircheckedby: user.userId,
       paidat: null,
@@ -52,10 +50,7 @@ const controller = {
       .populate('createdby')
       .populate('checkedby')
       .exec()
-      .then(data => {
-        //    console.log('Data from super: ', data);
-        return res.status(200).json(data);
-      })
+      .then(data => HttpSuccessHandler(res, 'director.get_my_products', data))
       .catch(err => {
         HttpErrorHandler(res, 'get_my_product', err)
       });
@@ -66,13 +61,11 @@ const controller = {
     cl('directot.get_paid: ');
     Items.find({
       dircheckedby: user.userId,
-      paidat: {$ne: null},
+      paidat: { $ne: null },
     })
       .populate('createdby')
       .exec()
-      .then(data => {
-        return res.status(200).json(data);
-      })
+      .then(data => HttpSuccessHandler(res, 'director.get_paid', data))
       .catch(err => {
         HttpErrorHandler(res, 'get_my_product', err)
       });
@@ -86,27 +79,24 @@ const controller = {
     })
       .exec()
       .then((data: any) => {
-        if (!data) return res.status(404).json({
-          message: 'The item is not found.'
-        });
-        if (data.dircheckedby) return res.status(200).json({
-          result: false,
-          message: 'The item was blocked by another user.'
-        });
+        if (!data) HttpErrorHandler(
+          res, 'director.post_pickup_item',
+          new Error('The item is not found.')
+        );
+        if (data.dircheckedby) HttpErrorHandler(
+          res, 'director.post_pickup_item',
+          new Error('The item was blocked by another user.')
+        );
 
         const user = getCurrentUser(req);
         data.dircheckedby = user.userId;
         data.save()
-          .then((data: any) => {
-            cl('director.post_pickup_item saved:', data);
-            return res.status(200).json({
-              result: true,
-              data: data
-            });
-          })
-          .catch((err: any) => {
-            HttpErrorHandler(res, 'post_add_items', err);
-          });
+          .then((data: any) => HttpSuccessHandler(
+            res, 'director.get_vac_product', data)
+          )
+          .catch((err: any) => HttpErrorHandler(
+            res, 'post_pickup_item', err)
+          );
       });
   },
 
@@ -124,38 +114,28 @@ const controller = {
         item.supervisorFine = ps(supervisorFine);
         item.supervisorFineComment = supervisorFineComment;
         item.save()
-          .then((result: any) => {
-            return res.status(200).json({
-              result: true,
-              data: result,
-            });
-          });
+          .then((data: any) => HttpSuccessHandler(res, 'director.patch_product', data))
       })
       .catch(err => {
-        HttpErrorHandler(res, 'dir_patch_product', err);
+        HttpErrorHandler(res, 'director.patch_product', err);
       })
 
   },
 
   post_make_payment: (req: express.Request, res: express.Response): void => {
-    cl('direktor.make_payment', req.body);
     const ids = req.body.products;
     if (!Array.isArray(ids) || ids.length === 0) throw new Error('We needed array of _ids here');
     cl('direktor.make_payment', ids);
 
 
     Items.updateMany({ _id: { $in: ids } }, { paidat: Date() })
-      .then(result => {
-        return res.status(200).json({
-          result: true,
-          data: result,
-        });
-      })
+      .then(data => HttpSuccessHandler(res, 'director.post_make_payment', data))
       .catch(err => {
-        HttpErrorHandler(res, 'dir_patch_product', err);
+        HttpErrorHandler(res, 'director.post_make_payment', err);
       });
 
   },
+
   get_all_users: (req: any, res: any): void => {
     Users.find({
     })
@@ -166,19 +146,19 @@ const controller = {
           const { _id, name, role, rate, email, fba, active } = _user;
           return { _id, name, role, rate, email, fba, active };
         });
-        res.status(200).json(users);
+        HttpSuccessHandler(res, 'director.get_all_users', users);
       })
       .catch(err => {
-        HttpErrorHandler(res, 'dir_get_all_users', err);
+        HttpErrorHandler(res, 'director.get_all_users', err);
       });
   },
+
   patch_user: (req: express.Request, res: express.Response): void => {
-    console.log('input in patch: ', req.body);
     const uid = req.body._id;
-    if (!uid) res.status(400).json({
-      message: 'We need user id as uid at least.'
-    });
-    console.log('active:');
+    if (!uid) HttpErrorHandler(
+      res, 'director.patch_user', new Error('We need user id as uid at least.')
+    );
+
     const name = req.body.name;
     const rate = parseFloat(req.body.rate);
     const role = parseInt(req.body.role);
@@ -202,45 +182,38 @@ const controller = {
         usr.fba = fba;
         usr.active = active;
         usr.save()
-          .then((result: any) => {
-            return res.status(200).json(result);
-          });
-      })
-      .catch(err => {
-        return res.status(500).json({
-          error: err
-        });
+          .then((result: any) => HttpSuccessHandler(res, 'director.patch_user', result))
+          .catch((err: any) => HttpErrorHandler(res, 'director.patch_user', err))
       });
 
   },
 
-  delete_user: (req: express.Request, res: express.Response): void => {
-    const uid = req.body.uid;
-    if (!uid) res.status(400).json({
-      message: 'We need user id as uid at least.'
-    });
+  // delete_user: (req: express.Request, res: express.Response): void => {
+  //   const uid = req.body.uid;
+  //   if (!uid) res.status(400).json({
+  //     message: 'We need user id as uid at least.'
+  //   });
 
-    Users.deleteOne({
-      _id: uid
-    })
-      .exec()
-      .then((result: any) => {
-        if (result.deletedCount === 0) {
-          return res.status(404).json({
-            message: `User with _id: ${uid} was not found.`
-          });
-        }
-        return res.status(200).json({
-          message: `User with _id: ${uid} was deleted successfull.`
-        });
-      })
-      .catch(err => {
-        return res.status(500).json({
-          error: err
-        });
-      });
-
-  },
+  //   Users.deleteOne({
+  //     _id: uid
+  //   })
+  //     .exec()
+  //     .then((result: any) => {
+  //       if (result.deletedCount === 0) {
+  //         return res.status(404).json({
+  //           message: `User with _id: ${uid} was not found.`
+  //         });
+  //       }
+  //       return res.status(200).json({
+  //         message: `User with _id: ${uid} was deleted successfull.`
+  //       });
+  //     })
+  //     .catch(err => {
+  //       return res.status(500).json({
+  //         error: err
+  //       });
+  //     });
+  // },
 
   get_all_checked_items: (req: express.Request, res: express.Response): void => {
     Items.find({
