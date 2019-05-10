@@ -33,12 +33,8 @@ const controller = {
 
     item
       .save()
-      .then(data => {
-        res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'post_add_items', err);
-      });
+      .then(data => HttpSuccessHandler(res, 'manager.post_add_product',data))
+      .catch(err => HttpErrorHandler(res, 'post_add_items', err));
   },
 
   patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
@@ -67,7 +63,7 @@ const controller = {
         item.icomment = icomment;
         item.save()
           .then((result: any) => {
-            res.status(200).json(result);
+            HttpSuccessHandler(res, 'manager.patch_product', 'ok'); 
           });
       })
       .catch(err => {
@@ -83,7 +79,7 @@ const controller = {
 
     Item.deleteOne({ _id: _id })
       .then((result: any) => {
-        res.status(200).json(result);
+        HttpSuccessHandler(res, 'manager.delete_product', result);
       })
       .catch(err => {
         HttpErrorHandler(res, 'delete_item', err);
@@ -138,7 +134,7 @@ const controller = {
       .then(async data => {
         cl('parsed data: ', data);
         await downloadimages(data.images);
-        res.status(200).json({ message: 'Ok', data: data });
+        HttpSuccessHandler(res, 'manager.get_all_products.items', data);
       })
       .catch(error => {
         HttpErrorHandler(res, 'parse_amazon_item', error)
