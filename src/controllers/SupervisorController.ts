@@ -1,13 +1,13 @@
 import Item from '../model/item';
 import getCurrentUser from '../helpers/getCurrentUser';
-import ItemStatus from '../interfaces/itemstatus';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
 import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
+import express from 'express';
 
 const controller = {
 
-  get_free: (req: any, res: any, next: Function): void => {
+  get_free: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
     cl('super.get_free:', user);
     let param;
@@ -33,7 +33,7 @@ const controller = {
 
   },
 
-  get_my_items: (req: any, res: any, next: Function): void => {
+  get_my_items: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
     cl('supervisor.get_my_item: ', [22]);
     Item.find({
@@ -49,7 +49,7 @@ const controller = {
       });
   },
 
-  patch_item: (req: any, res: any, next: Function): void => {
+  patch_item: (req: express.Request, res: express.Response): void => {
     //const user = getCurrentUser(req); 
     cl('supervisor.patch_item', req.body);
     const { _id, status, checkednotes } = req.body;
@@ -73,7 +73,7 @@ const controller = {
       .catch(err => HttpErrorHandler(res, 'Suprvisor.patch_item', err));
   },
 
-  post_pickup_item: (req: any, res: any, next: Function): void => {
+  post_pickup_item: (req: express.Request, res: express.Response): void => {
     const iid = req.body.iid;
     Item.findOne({
       _id: iid
@@ -102,7 +102,7 @@ const controller = {
           });
       });
   },
-  
+
   // post_change_status: (req: any, res: any, next: Function): void => {
   //   const user = getCurrentUser(req);
   //   const iid = req.body.iid;
