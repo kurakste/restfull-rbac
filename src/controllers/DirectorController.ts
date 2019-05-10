@@ -35,9 +35,7 @@ const controller = {
     Items.find(param)
       .exec()
       .then(data => HttpSuccessHandler(res, 'director.get_vac_product', data))
-      .catch(err => {
-        HttpErrorHandler(res, 'director.get_vac_product', err);
-      });
+      .catch(err => HttpErrorHandler(res, 'director.get_vac_product', err));
   },
 
   get_my_products: (req: express.Request, res: express.Response): void => {
@@ -51,9 +49,7 @@ const controller = {
       .populate('checkedby')
       .exec()
       .then(data => HttpSuccessHandler(res, 'director.get_my_products', data))
-      .catch(err => {
-        HttpErrorHandler(res, 'get_my_product', err)
-      });
+      .catch(err => HttpErrorHandler(res, 'get_my_product', err));
   },
 
   get_paid: (req: express.Request, res: express.Response): void => {
@@ -66,9 +62,7 @@ const controller = {
       .populate('createdby')
       .exec()
       .then(data => HttpSuccessHandler(res, 'director.get_paid', data))
-      .catch(err => {
-        HttpErrorHandler(res, 'get_my_product', err)
-      });
+      .catch(err => HttpErrorHandler(res, 'get_my_product', err));
   },
 
   post_pickup_item: (req: express.Request, res: express.Response): void => {
@@ -116,9 +110,7 @@ const controller = {
         item.save()
           .then((data: any) => HttpSuccessHandler(res, 'director.patch_product', data))
       })
-      .catch(err => {
-        HttpErrorHandler(res, 'director.patch_product', err);
-      })
+      .catch(err => HttpErrorHandler(res, 'director.patch_product', err));
 
   },
 
@@ -127,13 +119,9 @@ const controller = {
     if (!Array.isArray(ids) || ids.length === 0) throw new Error('We needed array of _ids here');
     cl('direktor.make_payment', ids);
 
-
     Items.updateMany({ _id: { $in: ids } }, { paidat: Date() })
       .then(data => HttpSuccessHandler(res, 'director.post_make_payment', data))
-      .catch(err => {
-        HttpErrorHandler(res, 'director.post_make_payment', err);
-      });
-
+      .catch(err => HttpErrorHandler(res, 'director.post_make_payment', err));
   },
 
   get_all_users: (req: any, res: any): void => {
@@ -188,33 +176,7 @@ const controller = {
 
   },
 
-  // delete_user: (req: express.Request, res: express.Response): void => {
-  //   const uid = req.body.uid;
-  //   if (!uid) res.status(400).json({
-  //     message: 'We need user id as uid at least.'
-  //   });
-
-  //   Users.deleteOne({
-  //     _id: uid
-  //   })
-  //     .exec()
-  //     .then((result: any) => {
-  //       if (result.deletedCount === 0) {
-  //         return res.status(404).json({
-  //           message: `User with _id: ${uid} was not found.`
-  //         });
-  //       }
-  //       return res.status(200).json({
-  //         message: `User with _id: ${uid} was deleted successfull.`
-  //       });
-  //     })
-  //     .catch(err => {
-  //       return res.status(500).json({
-  //         error: err
-  //       });
-  //     });
-  // },
-
+  /*
   get_all_checked_items: (req: express.Request, res: express.Response): void => {
     Items.find({
       checkedby: { $ne: null },
@@ -247,6 +209,7 @@ const controller = {
       });
 
   },
+
 
   patch_item: (req: express.Request, res: express.Response): void => {
     //const user = getCurrentUser(req); 
@@ -282,11 +245,7 @@ const controller = {
         console.log(err);
       });
   },
-  /**
-   *  It gets array of items id wich hase to be marked as 
-   *  paid. In database paid items have paid_at date. If that field null - 
-   *  the item is not paid, if it hase date - it hase been paid. 
-   */
+  
   pos_make_items_paid: (req: express.Request, res: express.Response): void => {
     console.log('We in the make items paid controller', req.body);
     if (
@@ -320,6 +279,7 @@ const controller = {
       })
 
   },
+  */
 
 }
 export default controller;
