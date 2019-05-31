@@ -29,6 +29,7 @@ const controller = {
   get_products: (req: express.Request, res: express.Response): void => {
     const user = getCurrentUser(req);
     Items.find({ buyer: user.userId })
+      .populate('createdby')
       .exec()
       .then(data => {
         HttpSuccessHandler(res, 'buyer.get_products', data);
@@ -51,7 +52,7 @@ const controller = {
         if (!data) HttpErrorHandler(
           res, 'buyer.pickup_products', new Error('The item is not found.')
         );
-        
+
         // Was the item picked up by another buyer?
         // There is a time lag betwin moment when user gets list 
         // of items & when he will try to pick up an item. 

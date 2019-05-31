@@ -4,6 +4,7 @@ import Items from '../model/item';
 import getCurrentUser from '../helpers/getCurrentUser';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
+import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
 
 const ps = (input: string): number => {
   const parsed = parseFloat(input);
@@ -19,13 +20,8 @@ const controller = {
       .populate('createdby')
       .populate('checkedby')
       .exec()
-      .then(data => {
-        //cl('admin.get_vac_product.selected', data);
-        return res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'post_add_items', err);
-      });
+      .then(data => HttpSuccessHandler(res, 'director.get_notpaid_products', data))
+      .catch(err => HttpErrorHandler(res, 'director.get_notpaid_products', err));
   },
 
   get_waiting_products: (req: express.Request, res: express.Response): void => {
@@ -34,13 +30,8 @@ const controller = {
     Items.find({ status: 0 })
       .populate('createdby')
       .exec()
-      .then(data => {
-        //cl('admin.get_vac_product.selected', data);
-        return res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'post_add_items', err);
-      });
+      .then(data => HttpSuccessHandler(res, 'director.get_paid', data))
+      .catch(err => HttpErrorHandler(res, 'post_add_items', err));
   },
 
   get_vac_products: (req: express.Request, res: express.Response): void => {
@@ -62,13 +53,8 @@ const controller = {
     }
     Items.find(param)
       .exec()
-      .then(data => {
-        //cl('admin.get_vac_product.selected', data);
-        return res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'post_add_items', err);
-      });
+      .then(data => HttpSuccessHandler(res, 'director.get_vac_products', data))
+      .catch(err => HttpErrorHandler(res, 'director.get_vac_products', err));
   },
 
   get_checking_products: (req: express.Request, res: express.Response): void => {
@@ -81,13 +67,8 @@ const controller = {
       .populate('createdby')
       .populate('dircheckedby')
       .exec()
-      .then(data => {
-        //    console.log('Data from super: ', data);
-        return res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'get_my_product', err)
-      });
+      .then(data => HttpSuccessHandler(res, 'director.get_checking_products', data))
+      .catch(err => HttpErrorHandler(res, 'director.get_checking_products', err));
   },
 
   get_paid: (req: express.Request, res: express.Response): void => {
@@ -99,12 +80,8 @@ const controller = {
       .populate('createdby')
       .populate('dircheckedby')
       .exec()
-      .then(data => {
-        return res.status(200).json(data);
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'get_my_product', err)
-      });
+      .then(data => HttpSuccessHandler(res, 'director.get_paid', data))
+      .catch(err => HttpErrorHandler(res, 'director.get_paid', err));
   },
 
   post_pickup_item: (req: express.Request, res: express.Response): void => {
@@ -126,16 +103,8 @@ const controller = {
         const user = getCurrentUser(req);
         data.dircheckedby = user.userId;
         data.save()
-          .then((data: any) => {
-            cl('admin.post_pickup_item saved:', data);
-            return res.status(200).json({
-              result: true,
-              data: data
-            });
-          })
-          .catch((err: any) => {
-            HttpErrorHandler(res, 'post_add_items', err);
-          });
+          .then((data: any)  => HttpSuccessHandler(res, 'director.post_pickup_item', data))
+          .catch((err: any) => HttpErrorHandler(res, 'director.post_pickup_item', err));
       });
   },
 
@@ -174,16 +143,8 @@ const controller = {
 
 
     Items.updateMany({ _id: { $in: ids } }, { paidat: Date() })
-      .then(result => {
-        return res.status(200).json({
-          result: true,
-          data: result,
-        });
-      })
-      .catch(err => {
-        HttpErrorHandler(res, 'dir_patch_product', err);
-      });
-
+      .then((data: any)  => HttpSuccessHandler(res, 'director.post_make_payment', data))
+      .catch((err: any) => HttpErrorHandler(res, 'director.post_make_payment', err));
   },
 
   get_all_users: (req: any, res: any): void => {
