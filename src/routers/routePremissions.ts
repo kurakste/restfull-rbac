@@ -53,6 +53,11 @@ const premissinons = [
   { path: '/user/one', method: 'PATCH', premited: 3 },
   { path: '/user/signin', method: 'POST', premited: 5 },
   { path: '/user/signup', method: 'POST', premited: 5 },
+
+  { path: '/item', method: 'GET', premited: 4 },
+  { path: '/item', method: 'POST', premited: 4 },
+  { path: '/item', method: 'PATCH', premited: 4 },
+  { path: '/item', method: 'DELETE', premited: 4 },
 ]
 
 export default premissinons;

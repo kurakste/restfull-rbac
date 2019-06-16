@@ -1,5 +1,6 @@
 import express from 'express';
 import userRouter from './routers/user';
+import itemRouter from './routers/itemRoutes';
 import adminRouter from './routers/adminRouter';
 import managersRoutes from './routers/managersRouter';
 import superviserRoutes from './routers/supervisorRouter';
@@ -72,6 +73,7 @@ app.use('/manager', managersRoutes);
 app.use('/supervisor', superviserRoutes);
 app.use('/director', directorRoutes);
 app.use('/buyer', buyerRouter);
+app.use('/item', itemRouter);
 
 app.use((req, res, next) => {
     let error: any;

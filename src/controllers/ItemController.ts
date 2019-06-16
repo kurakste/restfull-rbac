@@ -1,0 +1,114 @@
+import Users from '../model/users';
+import express from 'express';
+import Items from '../model/item';
+import mongoose from 'mongoose';
+import getCurrentUser from '../helpers/getCurrentUser';
+import cl from '../helpers/debugMessageLoger';
+import HttpErrorHandler from '../helpers/HttpErrorHandler';
+import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
+
+const controller = {
+  get_product: (req: express.Request, res: express.Response): void => {
+    const iid = req.query.id;
+    cl('admin.get', iid);
+    Items.findOne({
+      _id: iid
+    })
+      .exec()
+      .then((product: any) => {
+        if (product) {
+          HttpSuccessHandler(res, 'item.get_product', product);
+        } else {
+          HttpErrorHandler(res, 'item.get_product', new Error('Not foud'));
+        }
+      });
+
+  },
+
+  patch_product: (req: express.Request, res: express.Response): void => {
+
+    const item = req.body;
+    Items.findOne({ _id: item._id })
+      .then((_item: any) => {
+        _item.id = item.id;
+        _item.lamazon = item.lamazon;
+        _item.lsupplier = item.lsupplier;
+        _item.fba = item.fba;
+        _item.minpurchase = ps(item.minpurchase);
+        _item.bsr = ps(item.bsr);
+        _item.amazon = ps(item.amazon);
+        _item.supplier = ps(item.supplier);
+        _item.fbalink = item.fbalink;
+        _item.fbafee = ps(item.fbafee);
+        _item.fbaamount = ps(item.fbaamount);
+        _item.delivery = ps(item.delivery);
+        _item.icomment = item.icomment;
+        _item.status = ps(item.status);
+        _item.checkednotes = item.checkednotes;
+        _item.managerFine = ps(item.managerFine);
+        _item.managerFineComment = item.managerFineComment;
+        _item.supervisorFine = ps(item.supervisorFine);
+        _item.supervisorFineComment = item.supervisorFineComment;
+        _item.dirdecision = ps(item.dirdecision);
+        _item.save()
+          .then((result: any) => {
+            console.log('ok: ', result);
+            HttpSuccessHandler(res, 'item.patch_product', 'ok');
+          })
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'patch_item', err);
+      })
+  },
+
+  post_product: (req: express.Request, res: express.Response): void => {
+
+    const item = req.body;
+    const _item = {
+      _id: mongoose.Types.ObjectId(),
+      id: item.id,
+      lamazon: item.lamazon,
+      lsupplier: item.lsupplier,
+      fba: item.fba,
+      minpurchase: ps(item.minpurchase),
+      bsr: ps(item.bsr),
+      amazon: ps(item.amazon),
+      supplier: ps(item.supplier),
+      fbalink: item.fbalink,
+      fbafee: ps(item.fbafee),
+      fbaamount: ps(item.fbaamount),
+      delivery: ps(item.delivery),
+      icomment: item.icomment,
+      status: ps(item.status),
+      checkednotes: item.checkednotes,
+      managerFine: ps(item.managerFine),
+      managerFineComment: item.managerFineComment,
+      supervisorFine: ps(item.supervisorFine),
+      supervisorFineComment: item.supervisorFineComment,
+      dirdecision: ps(item.dirdecision),
+    };
+    
+    const itemForSave = new Items(_item);
+    itemForSave
+      .save()
+      .then((_item: any) => {
+        _item.save()
+          .then((result: any) => {
+            console.log('ok: ', result);
+            HttpSuccessHandler(res, 'item.patch_product', 'ok');
+          })
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'patch_item', err);
+      })
+  },
+
+}
+
+export default controller;
+
+function ps(input: string): number {
+  const parsed = parseFloat(input);
+  if (parsed !== parsed) return 0;
+  return parsed;
+}
