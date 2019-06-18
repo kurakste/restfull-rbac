@@ -1,11 +1,10 @@
-import Users from '../model/users';
 import express from 'express';
 import Items from '../model/item';
 import mongoose from 'mongoose';
-import getCurrentUser from '../helpers/getCurrentUser';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
 import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
+import getCurrentUser from '../helpers/getCurrentUser';
 
 const controller = {
   get_product: (req: express.Request, res: express.Response): void => {
@@ -28,6 +27,8 @@ const controller = {
   patch_product: (req: express.Request, res: express.Response): void => {
 
     const item = req.body;
+    console.log('===========>', item);
+
     Items.findOne({ _id: item._id })
       .then((_item: any) => {
         _item.id = item.id;
@@ -50,6 +51,12 @@ const controller = {
         _item.supervisorFine = ps(item.supervisorFine);
         _item.supervisorFineComment = item.supervisorFineComment;
         _item.dirdecision = ps(item.dirdecision);
+        _item.images = item.images;
+        _item.checkedby = item.checkedby;
+        _item.buyerscomment = item.buyerscomment;
+
+        if (item.checkedat) _item.checkedat = item.checkedat;
+
         _item.save()
           .then((result: any) => {
             console.log('ok: ', result);
@@ -63,8 +70,9 @@ const controller = {
 
   post_product: (req: express.Request, res: express.Response): void => {
 
+    const user = getCurrentUser(req);
     const item = req.body;
-    const _item = {
+    const _item:any = {
       _id: mongoose.Types.ObjectId(),
       id: item.id,
       lamazon: item.lamazon,
@@ -86,8 +94,12 @@ const controller = {
       supervisorFine: ps(item.supervisorFine),
       supervisorFineComment: item.supervisorFineComment,
       dirdecision: ps(item.dirdecision),
+      images: item.images,
+      createdby: user.userId,
+      createdat: Date(),
     };
-    
+
+
     const itemForSave = new Items(_item);
     itemForSave
       .save()
@@ -101,6 +113,20 @@ const controller = {
       .catch(err => {
         HttpErrorHandler(res, 'patch_item', err);
       })
+  },
+
+  delete_product: async (req: express.Request, res: express.Response): Promise<void> => {
+    cl('delete_item', req.body);
+    
+    const _id = req.query._id;
+
+    Items.deleteOne({ _id: _id })
+      .then((result: any) => {
+        HttpSuccessHandler(res, 'manager.delete_product', result);
+      })
+      .catch(err => {
+        HttpErrorHandler(res, 'delete_item', err);
+      });
   },
 
 }
