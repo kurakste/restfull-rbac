@@ -14,7 +14,6 @@ const controller = {
 
   //TODO: Why Express.Request not work with bodyParser???
   post_sign_up: (req: any, res: any, next: Function): void => {
-    console.log('body:', req.body);
     const name: string = req.body.name;
     const email: string = req.body.email;
     const password: string | null = req.body.password;
