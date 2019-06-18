@@ -54,6 +54,9 @@ const controller = {
         _item.images = item.images;
         _item.checkedby = item.checkedby;
         _item.buyerscomment = item.buyerscomment;
+        _item.amazonDescription = item.amazonDescription;
+        _item.amazonDetail = item.amazonDetail;
+        _item.amazonTitle = item.amazonTitle;
 
         if (item.checkedat) _item.checkedat = item.checkedat;
 
@@ -97,8 +100,10 @@ const controller = {
       images: item.images,
       createdby: user.userId,
       createdat: Date(),
+      amazonDescription: item.amazonDescription,
+      amazonDetail: item.amazonDetail,
+      amazonTitle: item.amazonTitle,
     };
-
 
     const itemForSave = new Items(_item);
     itemForSave
