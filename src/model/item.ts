@@ -25,36 +25,36 @@ const itemSchema = new mongoose.Schema({
   reffee: { type: Number, reqierd: false },
   //Total fba fee = referal fee + fba fee). Only for fba.
   fbafee: { type: Number, reqierd: false },
+  fbaamount:{ type: Number, reqierd: false }, 
+  fbalink: { type: String, reqierd: false }, 
   //Delivery cost per one ps. 
   delivery: { type: Number, reqierd: false },
   //Calculated profit per one ps.
-  profit: { type: Number, reqierd: false },
+  // profit: { type: Number, reqierd: false },
   //Margin required only for non fba. Wish in fba.
-  margin: { type: Number, reqierd: false },
+  // margin: { type: Number, reqierd: false },
   //any comments from manager for this item.
   icomment: { type: String, reqierd: false },
   createdat: { type: Date, reqierd: true },
   createdby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: true },
-  checkedstate: { type: Number, reqierd: false },
+//  checkedstate: { type: Number, reqierd: false },
+  status: { type: Number, reqierd: false,default: Istatus.newitem },
   checkedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
   checkednotes: { type: String, reqierd: false },
   checkedat: { type: Date, reqierd: true },
-  status: { type: Number, reqierd: false,default: Istatus.newitem },
   // Data whent the payment was made.
-  paidat: { type: Date, reqierd: false },
-  //Who made this payment.
-  paidby:  { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
-  images: { type: Array },
-  buyer: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false }, 
-  buyerscomment: { type: String, reqierd: false },
-  fbaamount:{ type: Number, reqierd: false }, 
-  fbalink: { type: String, reqierd: false }, 
-  dircheckedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
-  dirdecision: { type: Number, reqierd: false, default: DirStatus.newitem },
   managerFine: { type: Number, required: false},
   managerFineComment: { type: String, reqierd: false },
   supervisorFine: { type: Number, required: false},
   supervisorFineComment: { type: String, reqierd: false },
+  dirdecision: { type: Number, reqierd: false, default: DirStatus.newitem },
+  dircheckedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
+  buyer: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false }, 
+  buyerscomment: { type: String, reqierd: false },
+  paidat: { type: Date, reqierd: false },
+  //Who made this payment.
+  paidby:  { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
+  images: { type: Array },
 });
 
 export default mongoose.model('items', itemSchema);
