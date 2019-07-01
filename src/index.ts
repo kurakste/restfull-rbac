@@ -64,7 +64,7 @@ app.use(auth);
 
 app.get('/', (req, res) => {
     console.log('connect');
-    res.send('hello world!');
+    res.send('');
 });
 
 app.use('/user', userRouter);
