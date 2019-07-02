@@ -6,6 +6,7 @@ import managersRoutes from './routers/managersRouter';
 import superviserRoutes from './routers/supervisorRouter';
 import directorRoutes from './routers/directorRouter';
 import buyerRouter from './routers/buyerRouter';
+import supplierRouter from './routers/supplierRouter';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser'; 
@@ -74,6 +75,7 @@ app.use('/supervisor', superviserRoutes);
 app.use('/director', directorRoutes);
 app.use('/buyer', buyerRouter);
 app.use('/item', itemRouter);
+app.use('/supplier', supplierRouter);
 
 app.use((req, res, next) => {
     let error: any;
