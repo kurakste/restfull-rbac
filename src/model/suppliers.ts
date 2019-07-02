@@ -6,6 +6,7 @@ const itemSchema = new mongoose.Schema({
   name: { type: String, reqierd: false },
   link: { type: String, reqierd: false },
   comment: { type: String, reqierd: false }
+
 });
 
 export default mongoose.model('suppliers', itemSchema);
