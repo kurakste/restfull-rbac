@@ -58,11 +58,12 @@ const premissinons = [
   { path: '/item', method: 'POST', premited: 4 },
   { path: '/item', method: 'PATCH', premited: 4 },
   { path: '/item', method: 'DELETE', premited: 4 },
-
-  { path: '/supplier', method: 'GET', premited: 4 },
-  { path: '/supplier', method: 'POST', premited: 4 },
-  { path: '/supplier', method: 'PATCH', premited: 4 },
-  { path: '/supplier', method: 'DELETE', premited: 4 },
+          
+  { path: '/supplier/all', method: 'GET', premited: 4 },
+  { path: '/supplier/one', method: 'GET', premited: 4 },
+  { path: '/supplier/one', method: 'POST', premited: 4 },
+  { path: '/supplier/one', method: 'PATCH', premited: 4 },
+  { path: '/supplier/one', method: 'DELETE', premited: 4 },
 ]
 
 export default premissinons;

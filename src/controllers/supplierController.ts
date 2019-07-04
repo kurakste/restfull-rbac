@@ -8,9 +8,27 @@ import HttpSuccessHandler from '../helpers/HttpSuccessHandler';
 const controller = {
   get_all_suppliers: (req: express.Request, res: express.Response): void => {
     const id = req.query.id;
-    cl('controller.get_all_suppliers', id);
+    cl('controller.get_all_suppliers', req.query);
     Suppliers.find({
       id: id
+    })
+      .exec()
+      .then((product: any) => {
+        if (product) {
+          HttpSuccessHandler(res, 'item.get_all_suppliers', product);
+        } else {
+          HttpErrorHandler(res, 'item.get_all_suppliers', new Error('Not foud'));
+        }
+      });
+
+  },
+
+
+  get_one_suppliers: (req: express.Request, res: express.Response): void => {
+    const _id = req.query._id;
+    cl('controller.get_all_suppliers', req.query);
+    Suppliers.findOne({
+      _id: _id
     })
       .exec()
       .then((product: any) => {
