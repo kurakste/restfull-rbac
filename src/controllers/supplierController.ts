@@ -51,6 +51,11 @@ const controller = {
         _supp.id = supplier.id;
         _supp.name = supplier.name;
         _supp.link = supplier.link;
+        _supp.price = ps(supplier.price);
+        _supp.delivery = ps(supplier.delivery);
+        _supp.amount = ps(supplier.amount);
+        _supp.minlot = ps(supplier.minlot);
+        _supp.lotcost = ps(supplier.lotcost);
         _supp.comment = supplier.comment;
 
         _supp.save()
@@ -72,6 +77,11 @@ const controller = {
       id: supplier.id,
       name: supplier.name,
       link: supplier.link,
+      price: ps(supplier.price),
+      delivery: ps(supplier.delivery),
+      amount: ps(supplier.amount),
+      minlot: ps(supplier.minlot),
+      lotcost: ps(supplier.lotcost),
       comment: supplier.comment,
     };
 
@@ -104,6 +114,12 @@ const controller = {
       });
   },
 
+}
+
+function ps(input: string): number {
+  const parsed = parseFloat(input);
+  if (parsed !== parsed) return 0;
+  return parsed;
 }
 
 export default controller;
