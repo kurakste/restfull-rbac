@@ -38,6 +38,7 @@ const controller = {
         _item.minpurchase = ps(item.minpurchase);
         _item.bsr = ps(item.bsr);
         _item.amazon = ps(item.amazon);
+        _item.weight = ps(item.weight);
         _item.supplier = ps(item.supplier);
         _item.fbalink = item.fbalink;
         _item.fbafee = ps(item.fbafee);
@@ -84,6 +85,7 @@ const controller = {
       minpurchase: ps(item.minpurchase),
       bsr: ps(item.bsr),
       amazon: ps(item.amazon),
+      weight: ps(item.weight),
       supplier: ps(item.supplier),
       fbalink: item.fbalink,
       fbafee: ps(item.fbafee),

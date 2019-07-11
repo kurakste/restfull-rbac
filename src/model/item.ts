@@ -19,6 +19,8 @@ const itemSchema = new mongoose.Schema({
   minpurchase:{ type: Number, reqierd: false }, 
   //Buybox price. Price from amazon.
   amazon: { type: Number, reqierd: false },
+  // Weight in kg from amazon.
+  weight: { type: Number, reqierd: false },
   //Supplier price include delivery costs. 
   supplier: { type: Number, reqierd: false },
   //Referal fee, ammazon's commission. Only for no fba.
