@@ -42,6 +42,7 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       detail: '',
       asin: '',
       bsr: '',
+      weight: 'NA',
     }
     const data = await needle('get', url + iid, opt);
     const html = data.body;
@@ -83,10 +84,19 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       return (filtered[0]) ? filtered[0] : '';
     }
 
-    const getWight = (input:string):string => {
-      const reg = /weight:?\s?(\d+.?\d*\s*\w+)?\s/i 
-      const res = input.match(reg);
-      return res ? res[1]: '';
+    const getWight = (input:string):number|'NA' => {
+      const reg = /weight:?\s?(\d+.?\d*\s*\w+)?\s/i;
+      const _res = input.match(reg);
+      const res = _res ? _res[0] : 'NA';
+      const reg2 = /([0-9]+([.][0-9]*)?)/i;
+      const _weight = res.match(reg2);
+      const weight:number =_weight ? parseFloat(_weight[0]) : 0; 
+      let wkg:number | 'NA' = weight/2.20462;
+      wkg = wkg ? wkg : 'NA';
+      console.log('====weight: ', weight);
+      console.log('====weight: ', wkg);
+      console.log('-----');
+      return wkg;
     }
 
     const getASIN = (input:string):string => {
@@ -103,7 +113,7 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     product.detail = getProdDetail();
     product.asin = getASIN(product.detail);
     product.bsr = getBsr(product.detail);
-    getWight(product.detail);
+    product.weight = getWight(product.detail);
     return product;
   }
   const data = await getData()

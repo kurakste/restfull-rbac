@@ -9,6 +9,7 @@ interface AmazonProfile {
   detail: string,
   asin: string,
   bsr: string,
+  weight: number | 'NA';
 }
 
 export default AmazonProfile;
