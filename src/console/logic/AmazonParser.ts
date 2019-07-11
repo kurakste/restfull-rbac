@@ -93,9 +93,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       const weight:number =_weight ? parseFloat(_weight[0]) : 0; 
       let wkg:number | 'NA' = weight/2.20462;
       wkg = wkg ? wkg : 'NA';
-      console.log('====weight: ', weight);
-      console.log('====weight: ', wkg);
-      console.log('-----');
       return wkg;
     }
 
