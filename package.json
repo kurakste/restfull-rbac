@@ -28,6 +28,7 @@
     "@types/lodash": "^4.14.123",
     "@types/mongoose": "^5.3.23",
     "@types/needle": "^2.0.4",
+    "@types/puppeteer-core": "^1.9.0",
     "@types/request": "^2.48.1",
     "bcrypt": "^3.0.5",
     "body-parser": "^1.18.3",
@@ -39,9 +40,10 @@
     "image-downloader": "^3.4.2",
     "jsonwebtoken": "^8.5.1",
     "loadash": "^1.0.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "mongoose": "^5.4.19",
     "needle": "^2.3.0",
+    "puppeteer": "^1.18.1",
     "request": "^2.88.0"
   },
   "devDependencies": {
