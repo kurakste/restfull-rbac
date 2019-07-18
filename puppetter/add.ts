@@ -9,7 +9,6 @@ import puppeteer from 'puppeteer';
     await page.click('#root > div > div > div > div > div > div.p-4.card > div > form > div.mb-4.input-group > input');
     await page.type('#root > div > div > div > div > div > div.p-4.card > div > form > div.mb-4.input-group > input', 'password');
     await page.click('#root > div > div > div > div > div > div.p-4.card > div > form > div.row > div:nth-child(1) > button');
-    await page.screenshot({path: 'example.png'});
+    //await page.screenshot({path: 'example.png'});
 
-  
 })();
