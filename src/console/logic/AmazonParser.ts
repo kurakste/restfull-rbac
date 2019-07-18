@@ -93,8 +93,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
       const _weight = res.match(reg2);
       const weight:number =_weight ? parseFloat(_weight[0]) : 0; 
       let result: number|'NA' = 'NA';
-      console.log('weight1: ', res);
-      console.log('weight o5: ', )
  
       if (res.split(' ')[2]==='pound' || res.split(' ')[2]==='pounds') {
         result = weight*0.453592;
@@ -104,7 +102,6 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
         result = result ? result : 'NA';
       }
       
-      console.log('weight2: ', result);
       return result;
     }
 
