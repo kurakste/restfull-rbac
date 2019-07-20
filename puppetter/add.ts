@@ -1,8 +1,24 @@
 import addItem from './addItem';
+import { manager1 } from './users';
+import fs from 'fs';
 
-const usr = {
-    email: 'igor@gmail.com',
-    pass: 'pass1word',
-}
+let asings: string[] = [];
+
 const url = 'localhost:3000/#/login';
-addItem('B075LQL5RN',usr, url);
+
+try {
+  const rawdata = fs.readFileSync('./puppetter/getasin/asin.json');
+  asings = JSON.parse(rawdata.toString());
+  console.log(`I get array of asings with ${asings.length} item`);
+} catch (e) {
+  console.error(e);
+}
+
+const startPos = process.argv[2] ? parseInt(process.argv[2]) : 0;
+const endPos = process.argv[3] ? parseInt(process.argv[3]) : asings.length;
+
+const workArr = asings.slice(startPos, endPos + 1);
+
+console.log(`Start adding ${workArr.length} items`);
+
+const resolvers = workArr.map(async (el, i) => addItem(el, manager1, url));
