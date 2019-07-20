@@ -34,14 +34,7 @@ async function getAssinFromCat(url: string, pageAmount: number): Promise<string[
     }
     const _arr:string[][]= await Promise.all(prom_bundel);
     const __arr:string[][] = Array.from(_arr);
-    console.log('not flated:', _arr); // [['dddd','ddd'],[....
-    console.log('is it array', Array.isArray(_arr)); // true
-    //const result:any = [...__arr];
-    const result:any[] = __arr.flat(); // :-(
-    console.log('flated', result);
-    //result = _arr.reduce((acc:any,el:any) => acc = [...acc, ...el], []); 
-    //const __arr = [..._arr];
-    //result = [...__arr];
+    result = __arr.reduce((ac:string[], el:string[]) => ac.concat(el), []);
     browser.close();
     
   } catch (e) {
@@ -52,14 +45,16 @@ async function getAssinFromCat(url: string, pageAmount: number): Promise<string[
 
 async function doWork(urls: string[]) {
   try {
-    const prom_bundle = urls.map((url: string) => getAssinFromCat(url, 2));
+    const prom_bundle = urls.map((url: string) => getAssinFromCat(url, 20));
     const res:any = await Promise.all(prom_bundle);
-    const result:Array<any> = res.flat();
+    //const result:Array<any> = res.flat();
     // res.forEach((element:Array<any>) => {
     //   result = [...result, ...element];
     // });
-    fs.writeFileSync('asin.json', JSON.stringify(result));
-    console.log(result.length);
+    const _res:string[][] = Array.from(res);
+    const flatted = _res.reduce((ac:string[], el:string[])=> ac.concat(el),[]);
+    fs.writeFileSync('asin.json', JSON.stringify(flatted));
+    console.log('Extracted codes: ', flatted.length);
   } catch (e) { console.log(e) };
 }
 
