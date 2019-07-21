@@ -15,7 +15,7 @@ try {
 }
 
 const startPos = process.argv[2] ? parseInt(process.argv[2]) : 0;
-const endPos = process.argv[3] ? parseInt(process.argv[3]) : asings.length;
+const endPos = process.argv[3] ? parseInt(process.argv[3]) : 5;
 
 const workArr = asings.slice(startPos, endPos + 1);
 
