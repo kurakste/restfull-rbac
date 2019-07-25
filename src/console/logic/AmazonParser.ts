@@ -85,16 +85,13 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     }
 
     const getWight = (input:string):number|'NA' => {
-      //const reg = /weight:?\s?(\d+.?\d*\s*\w+)?\s/i;
       const reg = /shipping weight:?\s?(\d+.?\d*\s*\w+)?\s/i;
 
       const _res = input.match(reg);
       const res = _res ? _res[0].trim() : 'NA';
       const reg2 = /([0-9]+([.][0-9]*)?)/i;
       const _weight = res.match(reg2);
-      console.log('============', res);
       const weight:number =_weight ? parseFloat(_weight[0]) : 0; 
-      console.log('++++++++++++++++++', weight);
       let result: number|'NA' = 'NA';
  
       if (res.split(' ')[3]==='pound' || res.split(' ')[3]==='pounds') {
