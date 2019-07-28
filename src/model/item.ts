@@ -16,6 +16,7 @@ const itemSchema = new mongoose.Schema({
   //best sales rate from amazon
   bsr: { type: Number, reqierd: false },
   fba: { type: Boolean, default: false },
+  express: { type: Boolean, default: false },
   minpurchase:{ type: Number, reqierd: false }, 
   //Buybox price. Price from amazon.
   amazon: { type: Number, reqierd: false },

@@ -35,6 +35,7 @@ const controller = {
         _item.lamazon = item.lamazon;
         _item.lsupplier = item.lsupplier;
         _item.fba = item.fba;
+        _item.express = item.express;
         _item.minpurchase = ps(item.minpurchase);
         _item.bsr = ps(item.bsr);
         _item.amazon = ps(item.amazon);
@@ -82,6 +83,7 @@ const controller = {
       lamazon: item.lamazon,
       lsupplier: item.lsupplier,
       fba: item.fba,
+      express: item.express,
       minpurchase: ps(item.minpurchase),
       bsr: ps(item.bsr),
       amazon: ps(item.amazon),
