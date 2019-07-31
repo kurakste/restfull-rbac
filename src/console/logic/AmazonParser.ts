@@ -50,7 +50,8 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     const dp = $('#imageBlock_feature_div'); //('#dp');
     dp.find('img').each(function (this: any, i, e) {
       let link = $(this).attr('src');
-      if (link.search('images/I/') !== -1) {
+
+      if ((link.search('images/I/') !== -1) && (link.search('jpg')!==-1)) {
         link = link.split('/')[5];
         let imageid = (link.split('.')[0]) ? link.split('.')[0] : '';
         imageid = imageid.replace(/%/g, '_'); // we cant use % as a part of file path...
