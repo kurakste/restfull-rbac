@@ -8,8 +8,11 @@ const url = 'localhost:3000/#/login';
 
 try {
   const rawdata = fs.readFileSync('./puppetter/getasin/asin.json');
-  asings = JSON.parse(rawdata.toString());
-  console.log(`I get array of asings with ${asings.length} item`);
+  const tmp:string[] = JSON.parse(rawdata.toString());
+  console.log(`I get array of asings with ${tmp.length} items`);
+  asings = [...new Set(tmp)];
+  console.log(`Uniq ${asings.length} items`);
+  
 } catch (e) {
   console.error(e);
 }
@@ -19,6 +22,24 @@ const endPos = process.argv[3] ? parseInt(process.argv[3]) : 5;
 
 const workArr = asings.slice(startPos, endPos + 1);
 
-console.log(`Start adding ${workArr.length} items`);
+(async function() {
+  const secondTry: string[] = [];
+  console.log(`Start adding ${workArr.length} items`);
+  for (let i = 0; i < workArr.length; i++) {
+    const el = workArr[i];
+    const out:{result:boolean, code: number, reason: string} = await addItem(el, manager1, url);
+    if (!out.result && out.code===3) {
+      secondTry.push(el);
+    }
+    console.log(`Done element (${i} of ${workArr.length}): ${el} with result ${out.result}, ${out.reason}`);
+  }
 
-const resolvers = workArr.map(async (el, i) => addItem(el, manager1, url));
+  for (let i = 0; i < secondTry.length; i++) {
+    const el = secondTry[i];
+    const out:{result:boolean, code: number, reason: string} = await addItem(el, manager1, url);
+    console.log(`Done element: ${el} with result ${out.result}, ${out.reason}`);
+  }
+
+
+
+})();
