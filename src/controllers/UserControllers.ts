@@ -83,7 +83,6 @@ const controller = {
           .then(result => {
             if (!process.env.JWT_KEY) throw new Error('JWT key not exist');
             if (result) {
-              console.log('from signin: ', user);
               const token = jwt.sign(
                 {
                   email: user[0].email,

@@ -115,8 +115,8 @@ const controller = {
       .then((_item: any) => {
         _item.save()
           .then((result: any) => {
-            console.log('ok: ', result);
-            HttpSuccessHandler(res, 'item.patch_product', 'ok');
+            console.log('item was saved:', result.id);
+            HttpSuccessHandler(res, 'item.post_product', 'ok');
           })
       })
       .catch(err => {

@@ -17,9 +17,11 @@ const ps = (input: string): number => {
 const controller = {
   post_add_product: async (req: express.Request, res: express.Response)
     : Promise<void> => {
-    const user = getCurrentUser(req);
-    const { id, lamazon, lsupplier, bsr, fba, minpurchase, amazon, supplier,
-      reffee, fbafee, delivery, profit, margin, icomment, images } = req.body;
+      const user = getCurrentUser(req);
+      const { id, lamazon, lsupplier, bsr, fba, minpurchase, amazon, supplier,
+        reffee, fbafee, delivery, profit, margin, icomment, images } = req.body;
+      
+    cl('parsed data: ', id);
 
     if (!id) HttpErrorHandler(res, 'add item', new Error('id is required'));
 
@@ -132,7 +134,7 @@ const controller = {
     const id = req.query.id;
     amazonParser(id)
       .then(async data => {
-        cl('parsed data: ', data);
+        cl('succesfull parsed data for id: ', id);
         await downloadimages(data.images);
         HttpSuccessHandler(res, 'manager.get_all_products.items', data);
       })
