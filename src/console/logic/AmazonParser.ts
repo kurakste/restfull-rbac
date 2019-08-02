@@ -1,7 +1,9 @@
 import needle from 'needle';
 import cheerio from 'cheerio';
+import tunnel from 'tunnel';
 import AmazonProductProfile from '../../interfaces/AmazonProfile';
 import cl from '../../helpers/debugMessageLoger';
+
 const userAg = [
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
   'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)',
@@ -24,9 +26,18 @@ const cleaner = (input: string): string => {
 const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
   cl('we parser iid:', iid);
   const url = 'https://www.amazon.com/dp/';
+  // const tunnelAgent = tunnel.httpsOverHttp({
+  //   proxy: {
+  //     host: '165.22.187.251',
+  //     port: 3128
+  //   }
+  // });
+
   const userAgIdx = Math.floor(Math.random() * (userAg.length - 1));
   const getData = async () => {
     const opt = {
+//      agent: tunnelAgent,
+      proxy: '180.92.238.232:8080',
       headers: {
         'User-Agent': userAg[userAgIdx],
       }
@@ -46,6 +57,8 @@ const parseAmazonProduct = async (iid = 'B01HVI1C46') => {
     }
     const data = await needle('get', url + iid, opt);
     const html = data.body;
+    console.log('data: ', html);
+    console.log('headers:', data.headers);
     const $ = cheerio.load(html);
     const dp = $('#imageBlock_feature_div'); //('#dp');
     dp.find('img').each(function (this: any, i, e) {
