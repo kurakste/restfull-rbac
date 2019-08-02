@@ -5,7 +5,7 @@ import tunnel from 'tunnel';
 function getProxy(){
   const tunnelingAgent = tunnel.httpsOverHttp({
     proxy: {
-      host: '51.79.26.40',
+      host: '51.79.6.40',
       port: 8080,
     }
   });
@@ -29,7 +29,7 @@ function getUserAgent() {
   return userAg[userAgIdx]
 }
 
-async function getHtmlBody(url: string, proxy: boolean = false): Promise<string | null> {
+async function getHtmlBody(url: string, proxy: boolean = false): Promise<string> {
   const _agent = proxy ? getProxy() : false;
   const setting: needle.NeedleOptions = {
     headers: {
@@ -52,11 +52,7 @@ async function getHtmlBody(url: string, proxy: boolean = false): Promise<string 
 
   return 'somthin goes wrong'
 }
-(async function () {
-  const res = await getHtmlBody('https://www.amazon.com/', true);
-  const html = res ? res : 'Something goes wrong...';
-  const $ = cheerio.load(html);
-  const dp = $('#glow-ingress-line2'); //('#dp');
-  console.log(dp.text());
-})();
+
+export default getHtmlBody;
+
 

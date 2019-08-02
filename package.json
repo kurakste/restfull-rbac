@@ -7,7 +7,7 @@
     "start": "tsc && node build/server.js",
     "watch": "nodemon -e ts -w ./src -x npm run watch:serve",
     "watch:serve": "ts-node src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "Restfull",
@@ -24,6 +24,7 @@
     "@types/cors": "^2.8.4",
     "@types/dotenv": "^6.1.0",
     "@types/faker": "^4.1.5",
+    "@types/jest": "^24.0.16",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/lodash": "^4.14.123",
     "@types/mongoose": "^5.3.23",
@@ -40,6 +41,7 @@
     "express": "^4.16.4",
     "faker": "^4.1.0",
     "image-downloader": "^3.4.2",
+    "jest": "^24.8.0",
     "jsonwebtoken": "^8.5.1",
     "loadash": "^1.0.0",
     "lodash": "^4.17.14",
