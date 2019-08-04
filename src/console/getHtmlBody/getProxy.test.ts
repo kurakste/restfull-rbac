@@ -2,7 +2,7 @@ import { getProxyObject } from './getProxy';
 
 
 test('is proxy object correct', () => {
-  const correct = 'MKgcW6:hQ1vwo@196.19.179.233:8000';
+  const correct = 'MKgcW6:hQ1vwo@196.19.179.233:8080';
   const result = getProxyObject(correct);
   expect((typeof(result)==='object')).toBe(true);
 
