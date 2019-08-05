@@ -22,6 +22,7 @@ function getProxyObject(input: string): ProxyObj {
 
 function getProxy() {
   const proxyIdx = Math.floor(Math.random() * (proxyList.length));
+  console.log(`used proxy: ${proxyList[proxyIdx]} `);
   return getProxyObject(proxyList[proxyIdx]);
 }
 
