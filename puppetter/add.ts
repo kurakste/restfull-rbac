@@ -40,6 +40,4 @@ const workArr = asings.slice(startPos, endPos + 1);
     console.log(`Done element: ${el} with result ${out.result}, ${out.reason}`);
   }
 
-
-
 })();
