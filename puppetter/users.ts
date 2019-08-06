@@ -3,4 +3,9 @@ const manager1 = {
   pass: 'pass1word'
 }
 
-export { manager1, }
+const manag1_host = {
+  email: 'manager1@gmail.com',
+  pass: 'password'
+}
+
+export { manager1, manag1_host }
