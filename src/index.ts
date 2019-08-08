@@ -12,19 +12,38 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser'; 
 import auth from './middleware/auth';
 import cors from 'cors';
+import winston from 'winston';
 
 const app = express();
 const port = 9090;
 dotenv.config();
 
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    defaultMeta: { service: 'user-service' },
+    transports: [
+      new winston.transports.File({ filename: './logs/amazon_api.log', level: 'info' }),
+    ]
+});
+
+const ctime = () => (new Date()).toLocaleString();
+
+
+
 const url:any = (process.env.mongoDbLogin) ? 'mongodb+srv://' 
-    + process.env.mongoDbLogin + ':' 
-    + process.env.mongoDbPwd + '@' 
-    + process.env.mongoDbHost 
-    : 'mongodb://' + process.env.mongoDbHost;
++ process.env.mongoDbLogin + ':' 
++ process.env.mongoDbPwd + '@' 
++ process.env.mongoDbHost 
+: 'mongodb://' + process.env.mongoDbHost;
 
 console.log('db connecting string: ', url);
 
+logger.log({
+    level: 'info',
+    message: `${ctime()} | App starting... db url ${url}`
+  });
+      new winston.transports.File({ filename: 'combined.log' })
 mongoose
     .connect(
         url,
