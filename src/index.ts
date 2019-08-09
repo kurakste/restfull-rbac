@@ -9,41 +9,25 @@ import buyerRouter from './routers/buyerRouter';
 import supplierRouter from './routers/supplierRouter';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import bodyParser from 'body-parser'; 
+import bodyParser from 'body-parser';
 import auth from './middleware/auth';
 import cors from 'cors';
-import winston from 'winston';
+import cl from './helpers/debugMessageLoger';
 
 const app = express();
 const port = 9090;
 dotenv.config();
 
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    defaultMeta: { service: 'user-service' },
-    transports: [
-      new winston.transports.File({ filename: './logs/amazon_api.log', level: 'info' }),
-    ]
-});
-
 const ctime = () => (new Date()).toLocaleString();
 
+const url: any = (process.env.mongoDbLogin) ? 'mongodb+srv://'
+    + process.env.mongoDbLogin + ':'
+    + process.env.mongoDbPwd + '@'
+    + process.env.mongoDbHost
+    : 'mongodb://' + process.env.mongoDbHost;
 
+cl('root', `${ctime()} | App starting... db url ${url}`)
 
-const url:any = (process.env.mongoDbLogin) ? 'mongodb+srv://' 
-+ process.env.mongoDbLogin + ':' 
-+ process.env.mongoDbPwd + '@' 
-+ process.env.mongoDbHost 
-: 'mongodb://' + process.env.mongoDbHost;
-
-console.log('db connecting string: ', url);
-
-logger.log({
-    level: 'info',
-    message: `${ctime()} | App starting... db url ${url}`
-  });
-      new winston.transports.File({ filename: 'combined.log' })
 mongoose
     .connect(
         url,
@@ -53,6 +37,7 @@ mongoose
         console.log('Data base connection error. Check dbase string in .env');
         process.exit(0);
     });
+
 // It fix deprication alerts.
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
@@ -72,18 +57,17 @@ app.use(cors({
 app.disable('x-powered-by');
 
 app.use('/public', express.static('public'));
-app.options("/*", function(req, res, next){
+app.options("/*", function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
     res.send(200);
-  });
+});
 
 app.use(bodyParser.json());
 app.use(auth);
 
 app.get('/', (req, res) => {
-    console.log('connect');
     res.send('');
 });
 
@@ -105,7 +89,7 @@ app.use((req, res, next) => {
 
 // Error handlers
 app.use((error: any, req: any, res: any, next: any) => {
-    console.log(error);
+    cl('express, error','', error )
     res.status(error.status || 500);
     res.json({
         error: { message: error.message }
@@ -113,5 +97,5 @@ app.use((error: any, req: any, res: any, next: any) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+    cl('lisent', `${ctime()} | Server (pid: ${process.pid}) started on port ${port}` )
 })

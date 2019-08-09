@@ -10,7 +10,6 @@ function getTunelAgent() {
   return tunnelingAgent
 }
 
-
 async function getHtmlBody(url: string, proxy: boolean = false): Promise<string> {
   const _agent = proxy ? getTunelAgent() : false;
   const setting: needle.NeedleOptions = {
