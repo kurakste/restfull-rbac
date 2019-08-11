@@ -1,5 +1,16 @@
 import mongoose from 'mongoose';
+import { Document } from 'mongoose'; 
 import Roles from '../interfaces/roles';
+
+export interface IUser extends Document {
+  _id: mongoose.Types.ObjectId,
+  name: string,
+  email: string,
+  password: string,
+  role: number,
+  fba: boolean,
+  active: boolean
+}
 
 const userSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
@@ -12,16 +23,8 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, reqierd: true },
   role: { type: Number, default: Roles.candidate },
-  rate: {
-    type: Number,
-    default: 0
-  },
-  finerate: {
-    type: Number,
-    default: 0
-  },
   fba: {type: Boolean, default: false },
   active: {type: Boolean, default: true },
 });
 
-export default mongoose.model('users', userSchema);
+export default mongoose.model<IUser>('users', userSchema);

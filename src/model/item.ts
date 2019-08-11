@@ -1,46 +1,67 @@
 import mongoose from 'mongoose';
+import { Document } from 'mongoose';
 import Istatus from '../interfaces/itemstatus';
 import DirStatus from '../interfaces/dirstatus';
 
+export interface IItem extends Document {
+  _id: mongoose.Types.ObjectId,
+  id: string,
+  lamazon: string,
+  lsupplier: string,
+  bsr: number,
+  fba: boolean,
+  expression: boolean,
+  minpurchase: number,
+  amazon: number,
+  weight: number,
+  supplier: number,
+  reffee: number,
+  fbafee: number,
+  fbaamount: number,
+  fbalink: string,
+  delivery: number,
+  icomment: string,
+  createdat: Date,
+  createdby: mongoose.Types.ObjectId,
+  status: number,
+  checkedby: mongoose.Types.ObjectId, 
+  checkednotes: string,
+  checkedat: Date,
+  managerFine: number,
+  managerFineComment: string,
+  supervisorFine: number,
+  dirdecision: number,
+  dircheckedby: mongoose.Types.ObjectId,
+  buyer: mongoose.Types.ObjectId,
+  buyerscomment: string,
+  paidat: Date,
+  paidby: mongoose.Types.ObjectId,
+  images: string[], 
+  amazonDescription: string,
+  amazonDetail: string, 
+  amazonTitle: string
+}
+
 const itemSchema = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
-  //name: { type: String, reqierd: true },
-  // Введите номер товара Asin / получаем из ссылки на амазон
   id: { type: String, reqierd: true, unique: true, dropDups: true  },
-  //is it usfull? 
-  //amazondesc: { type: mongoose.Types.ObjectId, ref: 'amazon', reqierd: false },
-  //Link for amazon
   lamazon: { type: String, reqierd: false },
-  //Link for supplier
   lsupplier: { type: String, reqierd: false },
-  //best sales rate from amazon
   bsr: { type: Number, reqierd: false },
   fba: { type: Boolean, default: false },
   express: { type: Boolean, default: false },
   minpurchase:{ type: Number, reqierd: false }, 
-  //Buybox price. Price from amazon.
   amazon: { type: Number, reqierd: false },
-  // Weight in kg from amazon.
   weight: { type: Number, reqierd: false },
-  //Supplier price include delivery costs. 
   supplier: { type: Number, reqierd: false },
-  //Referal fee, ammazon's commission. Only for no fba.
   reffee: { type: Number, reqierd: false },
-  //Total fba fee = referal fee + fba fee). Only for fba.
   fbafee: { type: Number, reqierd: false },
   fbaamount:{ type: Number, reqierd: false }, 
   fbalink: { type: String, reqierd: false }, 
-  //Delivery cost per one ps. 
   delivery: { type: Number, reqierd: false },
-  //Calculated profit per one ps.
-  // profit: { type: Number, reqierd: false },
-  //Margin required only for non fba. Wish in fba.
-  // margin: { type: Number, reqierd: false },
-  //any comments from manager for this item.
   icomment: { type: String, reqierd: false },
   createdat: { type: Date, reqierd: true },
   createdby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: true },
-//  checkedstate: { type: Number, reqierd: false },
   status: { type: Number, reqierd: false,default: Istatus.newitem },
   checkedby: { type: mongoose.Types.ObjectId, ref: 'users', reqierd: false },
   checkednotes: { type: String, reqierd: false },
@@ -63,4 +84,4 @@ const itemSchema = new mongoose.Schema({
   amazonTitle: { type: String, reqierd: false },  
 });
 
-export default mongoose.model('items', itemSchema);
+export default mongoose.model<IItem>('items', itemSchema);

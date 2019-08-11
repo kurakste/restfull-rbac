@@ -5,6 +5,7 @@ services:
     container_name: app
     restart: always
     build: .
+    command: "ts-node ./src/index.ts"
     ports:
       - "9090:9090"
     links:

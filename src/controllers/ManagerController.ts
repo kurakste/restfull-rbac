@@ -19,7 +19,7 @@ const controller = {
     : Promise<void> => {
       const user = getCurrentUser(req);
       const { id, lamazon, lsupplier, bsr, fba, minpurchase, amazon, supplier,
-        reffee, fbafee, delivery, profit, margin, icomment, images } = req.body;
+        reffee, fbafee, delivery, icomment, images } = req.body;
       
     cl('parsed data: ', id);
 
@@ -28,7 +28,7 @@ const controller = {
     const item = new Item({
       _id: mongoose.Types.ObjectId(),
       id, fba, minpurchase, lamazon, lsupplier, bsr, amazon, supplier,
-      reffee, fbafee, delivery, profit, margin, icomment, images,
+      reffee, fbafee, delivery, icomment, images,
       createdat: Date(),
       createdby: user.userId
     });

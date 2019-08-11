@@ -14,13 +14,13 @@ const controller = {
 
   //TODO: Why Express.Request not work with bodyParser???
   post_sign_up: (req: any, res: any, next: Function): void => {
-    const name: string = req.body.name;
+    const name: string = req.body.name ? req.body.name : '';
     const email: string = req.body.email;
     const password: string | null = req.body.password;
     if (!(email && password)) return res
       .status(200).json(apiDataObject(null, false, 'Login & password are required.'))
 
-    // it will return ppromisies with flag in resolve function
+    // it will return promisies with flag in resolve function
     isUserExist(email)
       .then(flag => {
         if (!flag) { //user with such email doesn't exist.
@@ -41,9 +41,9 @@ const controller = {
                     apiDataObject(result)
                   );
                 })
-                .catch(err => {
+                .catch((err:any) => {
                   res.status(200).json(
-                    apiDataObject(null, false, 'Data base error')
+                    apiDataObject(null, false, `${err}` )
                   );
                 });
             })
