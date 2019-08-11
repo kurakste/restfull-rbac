@@ -26,8 +26,8 @@ const url: any = (process.env.mongoDbLogin) ? 'mongodb+srv://'
     + process.env.mongoDbHost
     : 'mongodb://' + process.env.mongoDbHost;
 
-cl('root', `${ctime()} | App starting... db url ${url}`)
-
+cl('root', `${ctime()} App starting... db url ${url}`)
+cl('check', 'i want a checkpoint here');
 mongoose
     .connect(
         url,
@@ -35,6 +35,7 @@ mongoose
     )
     .catch(err => {
         console.log('Data base connection error. Check dbase string in .env');
+        console.log(err);
         process.exit(0);
     });
 

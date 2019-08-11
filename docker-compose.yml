@@ -1,6 +1,16 @@
 version: '2'
 
 services:
+  app:
+    container_name: app
+    restart: always
+    build: .
+    ports:
+      - "9090:9090"
+    links:
+      - mongodb
+    volumes:
+      - .:/usr/src/app
   mongodb:
     image: 'mongo'
     restart: always
