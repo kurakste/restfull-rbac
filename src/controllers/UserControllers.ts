@@ -2,7 +2,7 @@ import User from '../model/users';
 import express from 'express';
 import mongoose from 'mongoose';
 import isUserExist from '../helpers/isUserExist';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import apiDataObject from '../helpers/apiDataObject';
