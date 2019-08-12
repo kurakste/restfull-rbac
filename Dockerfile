@@ -3,12 +3,12 @@ WORKDIR /usr/src/app
 RUN npm install typescript -g
 RUN npm install ts-node -g
 COPY package*.json ./
-#RUN apt-get update && apt-get install -y build-essential && apt-get install -y python && npm install
 RUN npm install
-# COPY . .
+#COPY . .
 EXPOSE 9090
-# CMD [ "ts-node", "./src/index.ts" ]
 
+#RUN apt-get update && apt-get install -y build-essential && apt-get install -y python && npm install
+# CMD [ "ts-node", "./src/index.ts" ]
 # FROM node:latest
 # RUN mkdir -p /home/node/app && chown -R node:node /home/node/app
 # WORKDIR /home/node/app

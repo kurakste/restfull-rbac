@@ -2,3 +2,11 @@ node_modules
 logs
 data
 public
+.git
+.gitignore
+.vscode
+Dockerfile*
+docker-compose*
+.dockerignore
+README.md
+LICENSE
