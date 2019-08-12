@@ -14,7 +14,7 @@ services:
       - mongodb
     volumes:
       - .:/usr/src/app
-      - /app/node_modules
+      - /usr/src/app/node_modules
   mongodb:
     image: 'mongo'
     restart: always
