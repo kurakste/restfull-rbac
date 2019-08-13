@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import Item from '../model/item';
 import getCurrentUser from '../helpers/getCurrentUser';
 import amazonParser from '../console/logic/AmazonParser';
+import sellcentrallParser from '../console/logic/SellCentrallParser'; 
 import downloadimages from '../helpers/amazonDownloadImages';
 import cl from '../helpers/debugMessageLoger';
 import HttpErrorHandler from '../helpers/HttpErrorHandler';
@@ -130,16 +131,30 @@ const controller = {
       });
   },
 
-  get_parse: async (req: express.Request, res: express.Response, ): Promise<void> => {
+  get_parse_amazon: async (req: express.Request, res: express.Response, ): Promise<void> => {
     const id = req.query.id;
     amazonParser(id)
       .then(async data => {
         cl('succesfull parsed data for id: ', id);
         await downloadimages(data.images);
-        HttpSuccessHandler(res, 'manager.get_all_products.items', data);
+        HttpSuccessHandler(res, 'manager.get_parse_amazon', data);
       })
       .catch(error => {
-        HttpErrorHandler(res, 'parse_amazon_item', error)
+        HttpErrorHandler(res, 'manager.get_parse_amazon', error)
+      })
+  },
+
+  get_parse_sellercentral: async (req: express.Request, res: express.Response, ): Promise<void> => {
+    const id = req.query.id;
+    const price = parseFloat(req.query.price);
+    console.log(`Get request for sellcentral assin: ${id} price: ${price}`)
+    sellcentrallParser(id, price)
+      .then(async data => {
+        cl('succesfull parsed data for id: ', id);
+        HttpSuccessHandler(res, 'manager.get_parse_sellcentral', data);
+      })
+      .catch(error => {
+        HttpErrorHandler(res, 'manager.get_parse_sellcentral', error)
       })
   },
 

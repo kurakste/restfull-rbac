@@ -4,7 +4,7 @@ interface IAmazonFeeAndDim {
   amazonFee: number;
   height: number,
   width: number,
-  lenght: number,
+  length: number,
   weight: number
 }
 
@@ -25,7 +25,7 @@ export default async function (asin: string, price: number): Promise<IAmazonFeeA
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   try {
-    await page.goto(url); //'localhost:3000/#/login');
+    await page.goto(url);
     await page.waitForSelector('#search-string');
     await page.click('#search-string');
     await page.type('#search-string', asin);
@@ -33,7 +33,7 @@ export default async function (asin: string, price: number): Promise<IAmazonFeeA
     await page.waitForSelector('#update-fees-link-announce');
     await page.waitFor(1000);
 
-    const lenght:number = await page.evaluate(() => {
+    const length:number = await page.evaluate(() => {
       const el = document.querySelector('#product-info-length');
       return el ? parseFloat(el.innerHTML) : 0;
     });
@@ -61,7 +61,7 @@ export default async function (asin: string, price: number): Promise<IAmazonFeeA
 
     const weight: number = weightToKg(_weight, _weightUnint); 
 
-    console.log(`lenght: ${lenght}, width: ${width}, height: ${height}, wight: ${weight} kg`);
+    console.log(`lenght: ${length}, width: ${width}, height: ${height}, wight: ${weight} kg`);
 
 
     await page.click('#afn-pricing');
@@ -91,10 +91,14 @@ export default async function (asin: string, price: number): Promise<IAmazonFeeA
     });
 
     return {
-      amazonFee, lenght, width, height, weight   
+      amazonFee, length, width, height, weight   
     };
   } catch {
 
     return false;
+  } finally {
+    page.close();
+    browser.close();
+
   }
 }
