@@ -39,6 +39,9 @@ const controller = {
         _item.minpurchase = ps(item.minpurchase);
         _item.bsr = ps(item.bsr);
         _item.amazon = ps(item.amazon);
+        _item.height = ps(item.height);
+        _item.width = ps(item.width);
+        _item.length = ps(item.length);
         _item.weight = ps(item.weight);
         _item.supplier = ps(item.supplier);
         _item.fbalink = item.fbalink;
@@ -87,6 +90,9 @@ const controller = {
       minpurchase: ps(item.minpurchase),
       bsr: ps(item.bsr),
       amazon: ps(item.amazon),
+      height: ps(item.height),
+      width: ps(item.width),
+      length: ps(item.length),
       weight: ps(item.weight),
       supplier: ps(item.supplier),
       fbalink: item.fbalink,
