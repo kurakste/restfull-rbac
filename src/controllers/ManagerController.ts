@@ -19,7 +19,7 @@ const controller = {
   post_add_product: async (req: express.Request, res: express.Response)
     : Promise<void> => {
       const user = getCurrentUser(req);
-      const { id, lamazon, lsupplier, bsr, fba, minpurchase, amazon, supplier,
+      const { id, lamazon, lsupplier, bsr, fba, amazon, supplier,
         reffee, fbafee, delivery, icomment, images } = req.body;
       
     cl('parsed data: ', id);
@@ -28,7 +28,7 @@ const controller = {
 
     const item = new Item({
       _id: mongoose.Types.ObjectId(),
-      id, fba, minpurchase, lamazon, lsupplier, bsr, amazon, supplier,
+      id, fba, lamazon, lsupplier, bsr, amazon, supplier,
       reffee, fbafee, delivery, icomment, images,
       createdat: Date(),
       createdby: user.userId
@@ -43,7 +43,7 @@ const controller = {
   patch_product: async (req: express.Request, res: express.Response): Promise<void> => {
     cl('patch_item', req.body);
     const {
-      _id, id, fba, minpurchase, lamazon, lsupplier, bsr, amazon,
+      _id, id, fba, lamazon, lsupplier, bsr, amazon,
       supplier, reffee, fbafee, delivery, profit,
       margin, icomment
     } = req.body;
@@ -54,7 +54,6 @@ const controller = {
         item.fba = fba;
         item.lamazon = lamazon;
         item.lsupplier = lsupplier;
-        item.minpurchase = ps(minpurchase);
         item.bsr = ps(bsr);
         item.amazon = ps(amazon);
         item.supplier = ps(supplier);
