@@ -10,14 +10,14 @@ const premissinons = [
   { path: '/buyer/products', method: 'GET', premited: 4 },
   { path: '/buyer/pickup-product', method: 'POST', premited: 4 },
   { path: '/buyer/product', method: 'PATCH', premited: 4 },
+
   { path: '/manager/add-item', method: 'POST', premited: 3 },
-  
   { path: '/manager/products', method: 'GET', premited: 3 },
   { path: '/manager/product', method: 'POST', premited: 3 },
   { path: '/manager/product', method: 'PATCH', premited: 3 },
   { path: '/manager/product', method: 'DELETE', premited: 3 },
-  { path: '/manager/parse_amazon', method: 'GET', premited: 3 },
-  { path: '/manager/parse_sellercentral', method: 'GET', premited: 3 },
+  { path: '/manager/parse-amazon', method: 'GET', premited: 3 },
+  { path: '/manager/parse-sellercentral', method: 'GET', premited: 3 },
   { path: '/manager/check-product', method: 'GET', premited: 3 },
   
   { path: '/supervisor/get-free', method: 'GET', premited: 2 },
