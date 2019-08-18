@@ -22,7 +22,9 @@ function weightToKg(weight:number, units: string):number {
 
 export default async function (asin: string, price: number): Promise<IAmazonFeeAndDim | boolean> {
   const url = 'https://sellercentral.amazon.com/fba/profitabilitycalculator/index?lang=en_US';
-  const browser = await puppeteer.launch({args: ['--no-sandbox']});
+  const browser = await puppeteer.launch(
+    {args: ['--no-sandbox', '--disable-setuid-sandbox']}
+    );
   const page = await browser.newPage();
   try {
     await page.goto(url);
