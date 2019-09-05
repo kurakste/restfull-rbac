@@ -1,4 +1,4 @@
-import proxyList from './proxyList';
+import proxyList from '../../../proxyListProd';
 
 interface ProxyObj {
   host: string,
