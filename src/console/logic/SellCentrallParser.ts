@@ -1,4 +1,5 @@
 import puppeteer from 'puppeteer';
+import getUserAgent from '../getHtmlBody/getUserAgent';
 
 interface IAmazonFeeAndDim {
   amazonFee: number;
@@ -26,6 +27,7 @@ export default async function (asin: string, price: number): Promise<IAmazonFeeA
     {args: ['--no-sandbox', '--disable-setuid-sandbox']}
     );
   const page = await browser.newPage();
+  await page.setUserAgent(getUserAgent());
   try {
     await page.goto(url);
     await page.waitForSelector('#search-string');
