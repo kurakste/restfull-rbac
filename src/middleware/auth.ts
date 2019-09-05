@@ -13,7 +13,6 @@ const auth = (
   const path = req.path.split('/');
   //cl('auth midleware: ', ['path: ', req.path, 'method', req.method])
   if (path[1] === 'public') return next();
-  console.log(path);
 
   const prem: any = _.filter(
     premissions,

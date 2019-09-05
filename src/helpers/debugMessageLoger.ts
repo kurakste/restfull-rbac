@@ -7,6 +7,7 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'amazon-api' },
   transports: [
     new winston.transports.File({ filename: './logs/amazon_api.log', level: 'info' }),
+    //new winston.transports.Console({ level: 'info' }),
   ]
 });
 

@@ -5,3 +5,4 @@ data
 public/img
 dump
 logs
+proxyListDev.ts
