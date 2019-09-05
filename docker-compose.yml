@@ -1,6 +1,13 @@
 version: '2'
 
 services:
+  mongodb:
+    image: 'mongo'
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/mongodb:/data/db
   app:
     container_name: app
     restart: always
@@ -15,10 +22,3 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-  mongodb:
-    image: 'mongo'
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./data/mongodb:/data/db
